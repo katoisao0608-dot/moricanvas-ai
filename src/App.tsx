@@ -7,72 +7,86 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-const useCases = [
+const presets = [
   {
-    name: "民宿宣传",
-    prompt: "Japanese countryside guesthouse, cozy wooden house, warm lights, pet-friendly stay, calm healing atmosphere, suitable for travel accommodation promotion",
+    id: "minpaku",
+    label: "民宿宣传",
+    title: "Pet-friendly Stay",
+    description: "适合民宿、老房、旅行住宿宣传",
+    prompt:
+      "premium Japanese countryside guesthouse campaign image, pet-friendly stay, cozy wooden house, warm interior light, quiet healing atmosphere, suitable for accommodation promotion",
   },
   {
-    name: "小红书封面",
-    prompt: "premium Xiaohongshu cover design, clean composition, trendy lifestyle visual, soft light, eye-catching but elegant",
+    id: "xiaohongshu",
+    label: "小红书封面",
+    title: "Lifestyle Cover",
+    description: "干净、显眼、适合种草封面",
+    prompt:
+      "premium Xiaohongshu lifestyle cover image, clean trendy composition, soft daylight, elegant negative space for title, attractive social media visual",
   },
   {
-    name: "Threads配图",
-    prompt: "minimal social media visual for Threads, clean layout, strong mood, modern editorial style, subtle negative space",
+    id: "threads",
+    label: "Threads配图",
+    title: "Minimal Mood",
+    description: "极简、有空气感、有留白",
+    prompt:
+      "minimal editorial social media image for Threads, calm mood, clean negative space, modern quiet luxury visual, no clutter",
   },
   {
-    name: "宠物写真",
-    prompt: "premium pet portrait, emotional expression, soft cinematic lighting, clean background, warm and charming atmosphere",
-  },
-  {
-    name: "旅行海报",
-    prompt: "travel poster, cinematic landscape, poetic mood, refined color palette, elegant composition",
-  },
-];
-
-const visualStyles = [
-  {
-    name: "手绘动画",
-    prompt: "soft hand-drawn anime style, gentle lines, warm colors, poetic atmosphere, refined illustration",
-  },
-  {
-    name: "高级写实",
-    prompt: "high-end photorealistic style, premium commercial photography, natural light, detailed texture",
-  },
-  {
-    name: "电影感",
-    prompt: "cinematic composition, dramatic lighting, film still, atmospheric depth, premium color grading",
-  },
-  {
-    name: "水彩治愈",
-    prompt: "soft watercolor illustration, gentle texture, calming mood, airy composition",
-  },
-  {
-    name: "日系杂志",
-    prompt: "Japanese lifestyle magazine style, clean layout, quiet luxury, natural tones, refined editorial visual",
+    id: "pet",
+    label: "宠物写真",
+    title: "Pet Portrait",
+    description: "柴犬、猫、宠物品牌感",
+    prompt:
+      "premium emotional pet portrait, warm cinematic lighting, clean background, expressive animal face, charming but refined commercial photography",
   },
 ];
 
-const typographyMoods = [
+const aesthetics = [
   {
-    name: "无文字",
-    prompt: "no text, no letters, no typography, image only",
+    label: "日系杂志",
+    prompt:
+      "Japanese lifestyle magazine aesthetic, natural tones, refined editorial composition, quiet luxury, soft realistic light",
   },
   {
-    name: "极简标题空间",
-    prompt: "large clean negative space for minimal title placement, modern editorial layout, no actual readable text",
+    label: "电影感",
+    prompt:
+      "cinematic film still aesthetic, atmospheric depth, premium color grading, dramatic but elegant lighting",
   },
   {
-    name: "海报排版感",
-    prompt: "poster-like composition with strong visual hierarchy, blank area for headline, no actual readable text",
+    label: "手绘动画",
+    prompt:
+      "soft hand-drawn animation illustration, gentle linework, warm palette, poetic atmosphere, refined anime-inspired visual",
+  },
+  {
+    label: "高级写实",
+    prompt:
+      "high-end photorealistic commercial photography, natural texture, premium lens quality, realistic details",
+  },
+];
+
+const layoutStyles = [
+  {
+    label: "无文字",
+    prompt: "no text, no letters, no logo, image only",
+  },
+  {
+    label: "标题留白",
+    prompt:
+      "large clean negative space for future title placement, no readable text, editorial layout",
+  },
+  {
+    label: "海报构图",
+    prompt:
+      "poster-like composition, strong visual hierarchy, clear subject, refined blank area, no readable text",
   },
 ];
 
 const ratios = [
-  { name: "1:1", prompt: "square composition, centered subject" },
-  { name: "4:5", prompt: "vertical social media composition, suitable for Xiaohongshu feed" },
-  { name: "9:16", prompt: "vertical story composition, mobile-first layout" },
-  { name: "16:9", prompt: "wide cinematic composition" },
+  { label: "1:1", size: "square composition, centered subject" },
+  { label: "4:5", size: "vertical 4:5 social feed composition" },
+  { label: "9:16", size: "mobile story vertical composition" },
+  { label: "16:9", size: "wide cinematic horizontal composition" },
 ];
 
 function App() {
@@ -80,14 +94,15 @@ function App() {
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [useCase, setUseCase] = useState(useCases[0]);
-  const [visualStyle, setVisualStyle] = useState(visualStyles[0]);
-  const [typography, setTypography] = useState(typographyMoods[0]);
-  const [ratio, setRatio] = useState(ratios[0]);
+  const [preset, setPreset] = useState(presets[0]);
+  const [aesthetic, setAesthetic] = useState(aesthetics[0]);
+  const [layoutStyle, setLayoutStyle] = useState(layoutStyles[1]);
+  const [ratio, setRatio] = useState(ratios[1]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState<any>(null);
+  const [showAuth, setShowAuth] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
@@ -107,6 +122,7 @@ function App() {
   async function signIn() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) alert(error.message);
+    else setShowAuth(false);
   }
 
   async function signOut() {
@@ -123,23 +139,23 @@ function App() {
     setImage("");
 
     const finalPrompt = `
-Main subject:
+Main idea:
 ${prompt}
 
-Use case:
-${useCase.prompt}
+Commercial use case:
+${preset.prompt}
 
-Visual style:
-${visualStyle.prompt}
+Visual aesthetic:
+${aesthetic.prompt}
 
-Typography and layout:
-${typography.prompt}
+Typography / layout direction:
+${layoutStyle.prompt}
 
 Aspect ratio:
-${ratio.prompt}
+${ratio.size}
 
-Quality direction:
-premium AI image, refined composition, commercially usable, clean details, beautiful lighting, coherent scene, no distorted objects, no messy text.
+Important quality rules:
+premium AI image, coherent scene, elegant composition, beautiful lighting, commercially usable, clean details, no messy typography, no watermark, no distorted objects.
 `;
 
     try {
@@ -148,16 +164,16 @@ premium AI image, refined composition, commercially usable, clean details, beaut
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: finalPrompt, ratio: ratio.name }),
+        body: JSON.stringify({
+          prompt: finalPrompt,
+          ratio: ratio.label,
+        }),
       });
 
       const data = await res.json();
 
-      if (data.image) {
-        setImage(data.image);
-      } else {
-        alert(data.error || "生成失败");
-      }
+      if (data.image) setImage(data.image);
+      else alert(data.error || "生成失败");
     } catch {
       alert("服务器错误");
     }
@@ -167,7 +183,6 @@ premium AI image, refined composition, commercially usable, clean details, beaut
 
   function downloadImage() {
     if (!image) return;
-
     const a = document.createElement("a");
     a.href = image;
     a.download = "moricanvas-ai.png";
@@ -176,164 +191,159 @@ premium AI image, refined composition, commercially usable, clean details, beaut
 
   return (
     <main className="app">
-      <nav className="topbar">
+      <header className="nav">
         <div className="brand">
-          <span className="brandIcon">🌿</span>
+          <div className="brandMark">M</div>
           <div>
             <strong>MoriCanvas AI</strong>
-            <small>Prompt-driven Visual Studio</small>
+            <span>Prompt-driven visual studio</span>
           </div>
         </div>
 
-        {user ? (
-          <button className="ghost" onClick={signOut}>退出登录</button>
-        ) : (
-          <span className="statusDot">Guest Mode</span>
-        )}
-      </nav>
+        <div className="navRight">
+          <span className="pill">{user ? user.email : "Guest Mode"}</span>
+          {user ? (
+            <button className="ghostBtn" onClick={signOut}>退出</button>
+          ) : (
+            <button className="ghostBtn" onClick={() => setShowAuth(!showAuth)}>
+              登录
+            </button>
+          )}
+        </div>
+      </header>
 
-      <section className="hero">
-        <p className="eyebrow">AI IMAGE GENERATOR FOR SNS / STAY / PET / TRAVEL</p>
-        <h1>让每一个选项，真正影响生成结果</h1>
-        <p className="heroText">
-          选择用途、画面风格、排版氛围和比例后，系统会自动组合成专业 prompt，不再只是装饰按钮。
-        </p>
-      </section>
-
-      {!user ? (
-        <section className="authBar">
-          <input
-            placeholder="邮箱"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            placeholder="密码"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <div className="authBtns">
-            <button onClick={signIn}>登录</button>
-            <button onClick={signUp}>注册</button>
-          </div>
-        </section>
-      ) : (
-        <section className="userCard">
-          <strong>{user.email}</strong>
-          <small>Free Plan · 后续可接入 credits / Stripe</small>
+      {showAuth && !user && (
+        <section className="authPanel">
+          <input placeholder="邮箱" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input placeholder="密码" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <button onClick={signIn}>登录</button>
+          <button onClick={signUp}>注册</button>
         </section>
       )}
 
-      <section className="workspace">
-        <section className="creator">
-          <div className="promptCard">
-            <div className="promptTop">
-              <span>Prompt</span>
-              <span>{useCase.name} · {visualStyle.name} · {ratio.name}</span>
+      <section className="hero">
+        <div>
+          <p className="eyebrow">SNS · STAY · PET · TRAVEL</p>
+          <h1>不是简单作图，是把用途、风格和构图一起生成。</h1>
+          <p>
+            选择一个真实商业场景，再选择视觉风格、排版方向和比例。每个选项都会写入最终 prompt，直接影响图片结果。
+          </p>
+        </div>
+      </section>
+
+      <section className="studio">
+        <section className="left">
+          <div className="block">
+            <div className="blockHead">
+              <span>01</span>
+              <h2>选择用途</h2>
+            </div>
+
+            <div className="presetGrid">
+              {presets.map((item) => (
+                <button
+                  key={item.id}
+                  className={preset.id === item.id ? "preset active" : "preset"}
+                  onClick={() => setPreset(item)}
+                >
+                  <strong>{item.label}</strong>
+                  <span>{item.title}</span>
+                  <small>{item.description}</small>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="block">
+            <div className="blockHead">
+              <span>02</span>
+              <h2>描述画面</h2>
             </div>
 
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="例如：北关东一栋可带宠物入住的日式老民宿，柴犬坐在木门前，傍晚暖光，安静治愈。"
+              placeholder="例：北关东一栋可带宠物入住的日式老民宿，柴犬坐在木门前，傍晚暖光，安静治愈。"
             />
           </div>
 
-          <div className="controls">
-            <div className="controlGroup">
-              <h3>用途模板</h3>
+          <div className="optionRow">
+            <div className="optionBox">
+              <h3>视觉风格</h3>
               <div className="chips">
-                {useCases.map((item) => (
+                {aesthetics.map((item) => (
                   <button
-                    key={item.name}
-                    className={useCase.name === item.name ? "chip active" : "chip"}
-                    onClick={() => setUseCase(item)}
+                    key={item.label}
+                    className={aesthetic.label === item.label ? "chip active" : "chip"}
+                    onClick={() => setAesthetic(item)}
                   >
-                    {item.name}
+                    {item.label}
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="controlGroup">
-              <h3>画面风格</h3>
+            <div className="optionBox">
+              <h3>标题 / 字体空间</h3>
               <div className="chips">
-                {visualStyles.map((item) => (
+                {layoutStyles.map((item) => (
                   <button
-                    key={item.name}
-                    className={visualStyle.name === item.name ? "chip active" : "chip"}
-                    onClick={() => setVisualStyle(item)}
+                    key={item.label}
+                    className={layoutStyle.label === item.label ? "chip active" : "chip"}
+                    onClick={() => setLayoutStyle(item)}
                   >
-                    {item.name}
+                    {item.label}
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="controlGroup">
-              <h3>字体 / 排版氛围</h3>
-              <div className="chips">
-                {typographyMoods.map((item) => (
-                  <button
-                    key={item.name}
-                    className={typography.name === item.name ? "chip active" : "chip"}
-                    onClick={() => setTypography(item)}
-                  >
-                    {item.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="controlGroup">
-              <h3>图片比例</h3>
+            <div className="optionBox">
+              <h3>比例</h3>
               <div className="chips">
                 {ratios.map((item) => (
                   <button
-                    key={item.name}
-                    className={ratio.name === item.name ? "chip active" : "chip"}
+                    key={item.label}
+                    className={ratio.label === item.label ? "chip active" : "chip"}
                     onClick={() => setRatio(item)}
                   >
-                    {item.name}
+                    {item.label}
                   </button>
                 ))}
               </div>
             </div>
           </div>
 
-          <button className="generate" onClick={generateImage} disabled={loading}>
+          <button className="generateBtn" onClick={generateImage} disabled={loading}>
             {loading ? "生成中..." : "生成图片"}
           </button>
         </section>
 
-        <aside className="preview">
-          <div className="previewTop">
-            <h2>Preview</h2>
-            <span>{image ? "Ready" : "Waiting"}</span>
+        <aside className="right">
+          <div className="previewHead">
+            <div>
+              <span>Preview</span>
+              <h2>{preset.label} · {aesthetic.label}</h2>
+            </div>
+            <em>{ratio.label}</em>
           </div>
 
-          <div className="canvas">
-            {loading && <div className="loader">生成中...</div>}
-
+          <div className="previewCanvas">
+            {loading && <div className="loading">Generating...</div>}
             {!loading && !image && (
               <div className="empty">
-                <span>✦</span>
+                <b>✦</b>
                 <p>生成结果会显示在这里</p>
               </div>
             )}
-
             {image && <img src={image} alt="Generated" />}
           </div>
 
           {image && (
-            <div className="resultActions">
+            <div className="actions">
               <button onClick={downloadImage}>下载图片</button>
-              <button
-                className="ghost"
-                onClick={() => navigator.clipboard.writeText(prompt)}
-              >
-                复制原始提示词
+              <button onClick={() => navigator.clipboard.writeText(prompt)}>
+                复制提示词
               </button>
             </div>
           )}
