@@ -1,411 +1,349 @@
-import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-import "./App.css";
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #111827;
+  background: #f7f3ea;
+}
 
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
+* {
+  box-sizing: border-box;
+}
 
-type Lang = "jp" | "en" | "cn";
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(187, 247, 208, 0.55), transparent 28%),
+    radial-gradient(circle at 100% 8%, rgba(253, 230, 138, 0.45), transparent 24%),
+    linear-gradient(135deg, #fbf7ef 0%, #efe7db 100%);
+}
 
-const text = {
-  jp: {
-    eyebrow: "AI画像生成 · 民泊 · ペット · 旅行 · SNS",
-    title: "一文から、投稿に使える上質な画像を生成",
-    subtitle:
-      "用途・雰囲気・比率を選ぶことで、生成結果そのものが変化します。",
-    login: "ログイン",
-    logout: "ログアウト",
-    guest: "ゲストモード",
-    prompt: "画像を説明してください",
-    generate: "画像を生成",
-    generating: "生成中...",
-    preview: "プレビュー",
-    waiting: "画像はここに表示されます",
-    download: "画像を保存",
-  },
+button,
+textarea,
+select {
+  font: inherit;
+}
 
-  en: {
-    eyebrow: "AI IMAGE · STAY · PET · TRAVEL · SOCIAL",
-    title: "Turn one sentence into a publish-ready image",
-    subtitle:
-      "Use case, style and ratio directly affect the generated result.",
-    login: "Log in",
-    logout: "Log out",
-    guest: "Guest mode",
-    prompt: "Describe your image",
-    generate: "Generate image",
-    generating: "Generating...",
-    preview: "Preview",
-    waiting: "Your image will appear here",
-    download: "Download",
-  },
+button {
+  cursor: pointer;
+}
 
-  cn: {
-    eyebrow: "AI 图片生成 · 民宿 · 宠物 · 旅行 · 社交媒体",
-    title: "输入一句话，生成适合发布的高级图片",
-    subtitle:
-      "用途、风格和比例会真正影响最终生成结果。",
-    login: "登录",
-    logout: "退出",
-    guest: "游客模式",
-    prompt: "描述你想生成的画面",
-    generate: "生成图片",
-    generating: "生成中...",
-    preview: "预览结果",
-    waiting: "生成结果会显示在这里",
-    download: "下载图片",
-  },
-};
+.app {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 28px;
+}
 
-const presets = [
-  {
-    name: "民宿",
-    prompt:
-      "Japanese countryside guesthouse, cozy wooden house, warm lights, healing atmosphere",
-  },
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 56px;
+}
 
-  {
-    name: "小红书",
-    prompt:
-      "premium lifestyle social media cover, trendy, clean composition",
-  },
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
 
-  {
-    name: "宠物",
-    prompt:
-      "premium pet portrait, emotional lighting, warm atmosphere",
-  },
+.brandIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  background: #111827;
+  color: #bef264;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 22px;
+}
 
-  {
-    name: "旅行",
-    prompt:
-      "cinematic travel poster, poetic landscape, refined color palette",
-  },
-];
+.brand strong {
+  display: block;
+  font-size: 20px;
+  color: #111827;
+}
 
-const styles = [
-  {
-    name: "日系",
-    prompt:
-      "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury",
-  },
+.brand small {
+  display: block;
+  margin-top: 3px;
+  color: #4b5563;
+}
 
-  {
-    name: "电影感",
-    prompt:
-      "cinematic film still, atmospheric depth, premium lighting",
-  },
+.topActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-  {
-    name: "手绘",
-    prompt:
-      "soft hand-drawn animation illustration, warm palette",
-  },
+.topActions select,
+.pill,
+.ghostBtn {
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  border-radius: 999px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #111827;
+  font-weight: 700;
+}
 
-  {
-    name: "写实",
-    prompt:
-      "high-end photorealistic commercial photography",
-  },
-];
+.ghostBtn:hover {
+  background: #111827;
+  color: white;
+}
 
-const ratios = [
-  {
-    name: "1:1",
-    prompt: "square composition",
-  },
+.hero {
+  max-width: 920px;
+  margin: 0 auto 42px;
+  text-align: center;
+}
 
-  {
-    name: "4:5",
-    prompt: "vertical social feed composition",
-  },
+.eyebrow {
+  margin: 0 0 16px;
+  color: #3f6212;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+}
 
-  {
-    name: "9:16",
-    prompt: "mobile vertical composition",
-  },
+.hero h1 {
+  margin: 0;
+  color: #111827;
+  font-size: clamp(42px, 6vw, 78px);
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
 
-  {
-    name: "16:9",
-    prompt: "wide cinematic composition",
-  },
-];
+.heroText {
+  max-width: 720px;
+  margin: 22px auto 0;
+  color: #374151;
+  font-size: 18px;
+  line-height: 1.8;
+}
 
-export default function App() {
-  const [lang, setLang] = useState<Lang>("jp");
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 440px;
+  gap: 24px;
+  align-items: start;
+}
 
-  const t = text[lang];
+.creator,
+.preview {
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 28px 80px rgba(52, 48, 40, 0.12);
+}
 
-  const [prompt, setPrompt] = useState("");
-  const [image, setImage] = useState("");
-  const [loading, setLoading] = useState(false);
+.creator {
+  padding: 24px;
+}
 
-  const [preset, setPreset] = useState(presets[0]);
-  const [style, setStyle] = useState(styles[0]);
-  const [ratio, setRatio] = useState(ratios[1]);
+.preview {
+  padding: 24px;
+  position: sticky;
+  top: 24px;
+}
 
-  const [user, setUser] = useState<any>(null);
+.sectionCard {
+  margin-bottom: 16px;
+  padding: 20px;
+  border-radius: 26px;
+  background: #fffaf2;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+}
 
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
-    });
+.sectionCard h3 {
+  margin: 0 0 14px;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 900;
+}
 
-    const { data } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null);
-      }
-    );
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
-    return () => data.subscription.unsubscribe();
-  }, []);
+.chip {
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  border-radius: 999px;
+  padding: 11px 16px;
+  background: white;
+  color: #111827;
+  font-weight: 700;
+}
 
-  async function signOut() {
-    await supabase.auth.signOut();
+.chip.active {
+  background: #bef264;
+  border-color: #111827;
+  color: #111827;
+}
+
+textarea {
+  width: 100%;
+  min-height: 210px;
+  padding: 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  background: white;
+  color: #111827;
+  resize: vertical;
+  outline: none;
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+textarea::placeholder {
+  color: #6b7280;
+}
+
+textarea:focus {
+  border-color: #111827;
+  box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08);
+}
+
+.generateBtn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 20px;
+  border: none;
+  border-radius: 24px;
+  background: #111827;
+  color: white;
+  font-size: 18px;
+  font-weight: 900;
+  transition: 0.2s ease;
+}
+
+.generateBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 42px rgba(17, 24, 39, 0.24);
+}
+
+.generateBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.previewTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 18px;
+}
+
+.previewTop span {
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.previewTop h2 {
+  margin: 6px 0 0;
+  color: #111827;
+  font-size: 22px;
+}
+
+.previewTop em {
+  font-style: normal;
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: #f3efe5;
+  color: #374151;
+  font-weight: 800;
+}
+
+.canvas {
+  aspect-ratio: 1 / 1.18;
+  border-radius: 30px;
+  overflow: hidden;
+  background: #fffaf2;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  display: grid;
+  place-items: center;
+}
+
+.canvas img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.empty {
+  text-align: center;
+  color: #4b5563;
+}
+
+.empty b {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 54px;
+  color: #111827;
+}
+
+.loading {
+  color: #111827;
+  font-weight: 900;
+}
+
+.actions {
+  margin-top: 16px;
+}
+
+.actions button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 20px;
+  background: #111827;
+  color: white;
+  font-weight: 900;
+}
+
+@media (max-width: 980px) {
+  .workspace {
+    grid-template-columns: 1fr;
   }
 
-  async function generateImage() {
-    if (!prompt.trim()) return;
+  .preview {
+    position: static;
+  }
+}
 
-    setLoading(true);
-    setImage("");
-
-    const finalPrompt = `
-Main idea:
-${prompt}
-
-Use case:
-${preset.prompt}
-
-Visual style:
-${style.prompt}
-
-Aspect ratio:
-${ratio.prompt}
-
-Premium AI image, elegant composition, commercially usable, beautiful lighting, no watermark.
-`;
-
-    try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          prompt: finalPrompt,
-          ratio: ratio.name,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.image) {
-        setImage(data.image);
-      }
-    } catch (err) {
-      alert("Error");
-    }
-
-    setLoading(false);
+@media (max-width: 700px) {
+  .app {
+    padding: 16px;
   }
 
-  function downloadImage() {
-    if (!image) return;
-
-    const a = document.createElement("a");
-
-    a.href = image;
-    a.download = "moricanvas-ai.png";
-
-    a.click();
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 42px;
   }
 
-  return (
-    <main className="app">
-      <header className="topbar">
-        <div className="brand">
-          <div className="brandIcon">M</div>
+  .topActions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
 
-          <div>
-            <strong>MoriCanvas AI</strong>
-            <small>AI Image Studio</small>
-          </div>
-        </div>
+  .hero h1 {
+    font-size: 46px;
+  }
 
-        <div className="topActions">
-          <select
-            value={lang}
-            onChange={(e) =>
-              setLang(e.target.value as Lang)
-            }
-          >
-            <option value="jp">日本語</option>
-            <option value="en">English</option>
-            <option value="cn">中文</option>
-          </select>
+  .creator,
+  .preview {
+    padding: 16px;
+    border-radius: 26px;
+  }
 
-          <span className="pill">
-            {user ? user.email : t.guest}
-          </span>
-
-          {user && (
-            <button
-              className="ghostBtn"
-              onClick={signOut}
-            >
-              {t.logout}
-            </button>
-          )}
-        </div>
-      </header>
-
-      <section className="hero">
-        <p className="eyebrow">{t.eyebrow}</p>
-
-        <h1>{t.title}</h1>
-
-        <p className="heroText">
-          {t.subtitle}
-        </p>
-      </section>
-
-      <section className="workspace">
-        <section className="creator">
-          <div className="sectionCard">
-            <h3>Use case</h3>
-
-            <div className="chips">
-              {presets.map((item) => (
-                <button
-                  key={item.name}
-                  className={
-                    preset.name === item.name
-                      ? "chip active"
-                      : "chip"
-                  }
-                  onClick={() => setPreset(item)}
-                >
-                  {item.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="sectionCard">
-            <h3>{t.prompt}</h3>
-
-            <textarea
-              value={prompt}
-              onChange={(e) =>
-                setPrompt(e.target.value)
-              }
-              placeholder="北关东の古民家、柴犬、夕方の暖かい光..."
-            />
-          </div>
-
-          <div className="sectionCard">
-            <h3>Style</h3>
-
-            <div className="chips">
-              {styles.map((item) => (
-                <button
-                  key={item.name}
-                  className={
-                    style.name === item.name
-                      ? "chip active"
-                      : "chip"
-                  }
-                  onClick={() => setStyle(item)}
-                >
-                  {item.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="sectionCard">
-            <h3>Ratio</h3>
-
-            <div className="chips">
-              {ratios.map((item) => (
-                <button
-                  key={item.name}
-                  className={
-                    ratio.name === item.name
-                      ? "chip active"
-                      : "chip"
-                  }
-                  onClick={() => setRatio(item)}
-                >
-                  {item.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <button
-            className="generateBtn"
-            onClick={generateImage}
-            disabled={loading}
-          >
-            {loading
-              ? t.generating
-              : t.generate}
-          </button>
-        </section>
-
-        <aside className="preview">
-          <div className="previewTop">
-            <div>
-              <span>{t.preview}</span>
-
-              <h2>
-                {preset.name} · {style.name}
-              </h2>
-            </div>
-
-            <em>{ratio.name}</em>
-          </div>
-
-          <div className="canvas">
-            {loading && (
-              <div className="loading">
-                {t.generating}
-              </div>
-            )}
-
-            {!loading && !image && (
-              <div className="empty">
-                <b>✦</b>
-
-                <p>{t.waiting}</p>
-              </div>
-            )}
-
-            {image && (
-              <img
-                src={image}
-                alt="Generated"
-              />
-            )}
-          </div>
-
-          {image && (
-            <div className="actions">
-              <button
-                onClick={downloadImage}
-              >
-                {t.download}
-              </button>
-            </div>
-          )}
-        </aside>
-      </section>
-    </main>
-  );
+  .sectionCard {
+    padding: 16px;
+    border-radius: 22px;
+  }
 }
