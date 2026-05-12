@@ -1,349 +1,650 @@
-:root {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #111827;
-  background: #f7f3ea;
-}
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+import "./App.css";
 
-* {
-  box-sizing: border-box;
-}
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at 18% 0%, rgba(187, 247, 208, 0.55), transparent 28%),
-    radial-gradient(circle at 100% 8%, rgba(253, 230, 138, 0.45), transparent 24%),
-    linear-gradient(135deg, #fbf7ef 0%, #efe7db 100%);
-}
+type Lang = "jp" | "en" | "cn";
 
-button,
-textarea,
-select {
-  font: inherit;
-}
+const data = {
+  jp: {
+    navLogin: "ログイン",
+    navLogout: "ログアウト",
+    guest: "ゲスト",
+    email: "メールアドレス",
+    password: "パスワード",
+    signIn: "ログイン",
+    signUp: "新規登録",
+    close: "閉じる",
+    plan: "無料プラン",
+    credits: "残り 5 枚",
+    eyebrow: "AI画像生成 · 民泊 · ペット · 旅行 · SNS",
+    title: "一文から、投稿に使える画像を生成",
+    subtitle:
+      "用途、雰囲気、比率を選ぶと、生成される画像の方向性が変わります。",
+    useCase: "用途",
+    promptTitle: "画像の説明",
+    styleTitle: "雰囲気",
+    layoutTitle: "レイアウト",
+    ratioTitle: "比率",
+    generate: "画像を生成",
+    generating: "生成中...",
+    preview: "プレビュー",
+    waiting: "生成画像がここに表示されます",
+    download: "画像を保存",
+    history: "履歴",
+    edit: "AI修正",
+    batch: "まとめて生成",
+    share: "共有用にコピー",
+    placeholder:
+      "例：北関東のペット可の古民家宿、木の玄関に座る柴犬、夕方の温かい光。",
+    presets: [
+      {
+        label: "民泊PR",
+        desc: "宿泊施設や古民家の宣伝向け",
+        prompt:
+          "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual",
+      },
+      {
+        label: "SNS表紙",
+        desc: "投稿・小红书・Threads向け",
+        prompt:
+          "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space",
+      },
+      {
+        label: "ペット写真",
+        desc: "犬・猫・ペットブランド向け",
+        prompt:
+          "premium pet portrait, warm emotional lighting, clean background, charming animal expression",
+      },
+      {
+        label: "旅行ポスター",
+        desc: "旅・地域紹介・観光向け",
+        prompt:
+          "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood",
+      },
+    ],
+    styles: [
+      {
+        label: "日系雑誌",
+        prompt:
+          "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition",
+      },
+      {
+        label: "映画風",
+        prompt:
+          "cinematic film still, atmospheric depth, premium lighting, elegant color grading",
+      },
+      {
+        label: "手描き",
+        prompt:
+          "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere",
+      },
+      {
+        label: "写実",
+        prompt:
+          "high-end photorealistic commercial photography, realistic texture, premium details",
+      },
+    ],
+    layouts: [
+      {
+        label: "文字なし",
+        prompt: "no text, no letters, no logo, image only",
+      },
+      {
+        label: "タイトル余白",
+        prompt:
+          "large clean negative space for future title placement, no readable text",
+      },
+      {
+        label: "ポスター構図",
+        prompt:
+          "poster-like composition, strong visual hierarchy, refined blank area, no readable text",
+      },
+    ],
+  },
 
-button {
-  cursor: pointer;
-}
+  en: {
+    navLogin: "Log in",
+    navLogout: "Log out",
+    guest: "Guest",
+    email: "Email",
+    password: "Password",
+    signIn: "Log in",
+    signUp: "Sign up",
+    close: "Close",
+    plan: "Free Plan",
+    credits: "5 credits left",
+    eyebrow: "AI Image · Stay · Pet · Travel · Social",
+    title: "Create publish-ready images from one sentence",
+    subtitle:
+      "Choose use case, mood, layout and ratio. Each option shapes the final image.",
+    useCase: "Use case",
+    promptTitle: "Image description",
+    styleTitle: "Mood",
+    layoutTitle: "Layout",
+    ratioTitle: "Ratio",
+    generate: "Generate image",
+    generating: "Generating...",
+    preview: "Preview",
+    waiting: "Your image will appear here",
+    download: "Download",
+    history: "History",
+    edit: "AI Edit",
+    batch: "Batch",
+    share: "Copy share text",
+    placeholder:
+      "Example: A pet-friendly old Japanese guesthouse in North Kanto, a Shiba Inu by the wooden entrance, warm evening light.",
+    presets: [
+      {
+        label: "Stay Promo",
+        desc: "For guesthouses and old houses",
+        prompt:
+          "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual",
+      },
+      {
+        label: "Social Cover",
+        desc: "For social posts and covers",
+        prompt:
+          "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space",
+      },
+      {
+        label: "Pet Portrait",
+        desc: "For dogs, cats and pet brands",
+        prompt:
+          "premium pet portrait, warm emotional lighting, clean background, charming animal expression",
+      },
+      {
+        label: "Travel Poster",
+        desc: "For travel and local promotion",
+        prompt:
+          "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood",
+      },
+    ],
+    styles: [
+      {
+        label: "Magazine",
+        prompt:
+          "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition",
+      },
+      {
+        label: "Cinematic",
+        prompt:
+          "cinematic film still, atmospheric depth, premium lighting, elegant color grading",
+      },
+      {
+        label: "Hand-drawn",
+        prompt:
+          "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere",
+      },
+      {
+        label: "Realistic",
+        prompt:
+          "high-end photorealistic commercial photography, realistic texture, premium details",
+      },
+    ],
+    layouts: [
+      {
+        label: "No text",
+        prompt: "no text, no letters, no logo, image only",
+      },
+      {
+        label: "Title space",
+        prompt:
+          "large clean negative space for future title placement, no readable text",
+      },
+      {
+        label: "Poster layout",
+        prompt:
+          "poster-like composition, strong visual hierarchy, refined blank area, no readable text",
+      },
+    ],
+  },
 
-.app {
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 28px;
-}
+  cn: {
+    navLogin: "登录",
+    navLogout: "退出",
+    guest: "游客",
+    email: "邮箱",
+    password: "密码",
+    signIn: "登录",
+    signUp: "注册",
+    close: "关闭",
+    plan: "免费计划",
+    credits: "剩余 5 张",
+    eyebrow: "AI 图片生成 · 民宿 · 宠物 · 旅行 · 社交媒体",
+    title: "输入一句话，生成适合发布的图片",
+    subtitle:
+      "选择用途、氛围、排版和比例，每一个选项都会影响最终生成结果。",
+    useCase: "用途",
+    promptTitle: "画面描述",
+    styleTitle: "氛围",
+    layoutTitle: "排版",
+    ratioTitle: "比例",
+    generate: "生成图片",
+    generating: "生成中...",
+    preview: "预览",
+    waiting: "生成结果会显示在这里",
+    download: "下载图片",
+    history: "历史记录",
+    edit: "AI 修图",
+    batch: "批量生成",
+    share: "复制分享文案",
+    placeholder:
+      "例：北关东一栋可带宠物入住的日式老民宿，柴犬坐在木门前，傍晚暖光。",
+    presets: [
+      {
+        label: "民宿宣传",
+        desc: "适合民宿、老房、住宿宣传",
+        prompt:
+          "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual",
+      },
+      {
+        label: "社媒封面",
+        desc: "适合小红书、Threads、封面图",
+        prompt:
+          "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space",
+      },
+      {
+        label: "宠物写真",
+        desc: "适合狗、猫、宠物品牌",
+        prompt:
+          "premium pet portrait, warm emotional lighting, clean background, charming animal expression",
+      },
+      {
+        label: "旅行海报",
+        desc: "适合旅行、地区介绍、观光宣传",
+        prompt:
+          "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood",
+      },
+    ],
+    styles: [
+      {
+        label: "日系杂志",
+        prompt:
+          "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition",
+      },
+      {
+        label: "电影感",
+        prompt:
+          "cinematic film still, atmospheric depth, premium lighting, elegant color grading",
+      },
+      {
+        label: "手绘",
+        prompt:
+          "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere",
+      },
+      {
+        label: "写实",
+        prompt:
+          "high-end photorealistic commercial photography, realistic texture, premium details",
+      },
+    ],
+    layouts: [
+      {
+        label: "无文字",
+        prompt: "no text, no letters, no logo, image only",
+      },
+      {
+        label: "标题留白",
+        prompt:
+          "large clean negative space for future title placement, no readable text",
+      },
+      {
+        label: "海报构图",
+        prompt:
+          "poster-like composition, strong visual hierarchy, refined blank area, no readable text",
+      },
+    ],
+  },
+};
 
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 56px;
-}
+const ratios = ["1:1", "4:5", "9:16", "16:9"];
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
+export default function App() {
+  const [lang, setLang] = useState<Lang>("jp");
+  const t = data[lang];
 
-.brandIcon {
-  width: 52px;
-  height: 52px;
-  border-radius: 18px;
-  background: #111827;
-  color: #bef264;
-  display: grid;
-  place-items: center;
-  font-weight: 900;
-  font-size: 22px;
-}
+  const [prompt, setPrompt] = useState("");
+  const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-.brand strong {
-  display: block;
-  font-size: 20px;
-  color: #111827;
-}
+  const [presetIndex, setPresetIndex] = useState(0);
+  const [styleIndex, setStyleIndex] = useState(0);
+  const [layoutIndex, setLayoutIndex] = useState(1);
+  const [ratio, setRatio] = useState("4:5");
 
-.brand small {
-  display: block;
-  margin-top: 3px;
-  color: #4b5563;
-}
+  const [user, setUser] = useState<any>(null);
+  const [showAuth, setShowAuth] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-.topActions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
 
-.topActions select,
-.pill,
-.ghostBtn {
-  border: 1px solid rgba(17, 24, 39, 0.12);
-  border-radius: 999px;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.86);
-  color: #111827;
-  font-weight: 700;
-}
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+        if (session?.user) setShowAuth(false);
+      }
+    );
 
-.ghostBtn:hover {
-  background: #111827;
-  color: white;
-}
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
-.hero {
-  max-width: 920px;
-  margin: 0 auto 42px;
-  text-align: center;
-}
+  async function signUp() {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
 
-.eyebrow {
-  margin: 0 0 16px;
-  color: #3f6212;
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 0.15em;
-}
-
-.hero h1 {
-  margin: 0;
-  color: #111827;
-  font-size: clamp(42px, 6vw, 78px);
-  line-height: 0.98;
-  letter-spacing: -0.06em;
-}
-
-.heroText {
-  max-width: 720px;
-  margin: 22px auto 0;
-  color: #374151;
-  font-size: 18px;
-  line-height: 1.8;
-}
-
-.workspace {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 440px;
-  gap: 24px;
-  align-items: start;
-}
-
-.creator,
-.preview {
-  border-radius: 34px;
-  background: rgba(255, 255, 255, 0.86);
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  box-shadow: 0 28px 80px rgba(52, 48, 40, 0.12);
-}
-
-.creator {
-  padding: 24px;
-}
-
-.preview {
-  padding: 24px;
-  position: sticky;
-  top: 24px;
-}
-
-.sectionCard {
-  margin-bottom: 16px;
-  padding: 20px;
-  border-radius: 26px;
-  background: #fffaf2;
-  border: 1px solid rgba(17, 24, 39, 0.06);
-}
-
-.sectionCard h3 {
-  margin: 0 0 14px;
-  color: #111827;
-  font-size: 15px;
-  font-weight: 900;
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.chip {
-  border: 1px solid rgba(17, 24, 39, 0.1);
-  border-radius: 999px;
-  padding: 11px 16px;
-  background: white;
-  color: #111827;
-  font-weight: 700;
-}
-
-.chip.active {
-  background: #bef264;
-  border-color: #111827;
-  color: #111827;
-}
-
-textarea {
-  width: 100%;
-  min-height: 210px;
-  padding: 20px;
-  border-radius: 24px;
-  border: 1px solid rgba(17, 24, 39, 0.1);
-  background: white;
-  color: #111827;
-  resize: vertical;
-  outline: none;
-  font-size: 17px;
-  line-height: 1.8;
-}
-
-textarea::placeholder {
-  color: #6b7280;
-}
-
-textarea:focus {
-  border-color: #111827;
-  box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08);
-}
-
-.generateBtn {
-  width: 100%;
-  margin-top: 8px;
-  padding: 20px;
-  border: none;
-  border-radius: 24px;
-  background: #111827;
-  color: white;
-  font-size: 18px;
-  font-weight: 900;
-  transition: 0.2s ease;
-}
-
-.generateBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 42px rgba(17, 24, 39, 0.24);
-}
-
-.generateBtn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.previewTop {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  margin-bottom: 18px;
-}
-
-.previewTop span {
-  color: #4b5563;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.previewTop h2 {
-  margin: 6px 0 0;
-  color: #111827;
-  font-size: 22px;
-}
-
-.previewTop em {
-  font-style: normal;
-  padding: 9px 13px;
-  border-radius: 999px;
-  background: #f3efe5;
-  color: #374151;
-  font-weight: 800;
-}
-
-.canvas {
-  aspect-ratio: 1 / 1.18;
-  border-radius: 30px;
-  overflow: hidden;
-  background: #fffaf2;
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  display: grid;
-  place-items: center;
-}
-
-.canvas img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.empty {
-  text-align: center;
-  color: #4b5563;
-}
-
-.empty b {
-  display: block;
-  margin-bottom: 12px;
-  font-size: 54px;
-  color: #111827;
-}
-
-.loading {
-  color: #111827;
-  font-weight: 900;
-}
-
-.actions {
-  margin-top: 16px;
-}
-
-.actions button {
-  width: 100%;
-  padding: 16px;
-  border: none;
-  border-radius: 20px;
-  background: #111827;
-  color: white;
-  font-weight: 900;
-}
-
-@media (max-width: 980px) {
-  .workspace {
-    grid-template-columns: 1fr;
+    alert(error ? error.message : "Done");
   }
 
-  .preview {
-    position: static;
-  }
-}
+  async function signIn() {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-@media (max-width: 700px) {
-  .app {
-    padding: 16px;
-  }
-
-  .topbar {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 18px;
-    margin-bottom: 42px;
+    if (error) alert(error.message);
   }
 
-  .topActions {
-    width: 100%;
-    flex-wrap: wrap;
+  async function signOut() {
+    await supabase.auth.signOut();
   }
 
-  .hero h1 {
-    font-size: 46px;
+  async function generateImage() {
+    if (!prompt.trim()) return;
+
+    setLoading(true);
+    setImage("");
+
+    const finalPrompt = `
+Main idea:
+${prompt}
+
+Use case:
+${t.presets[presetIndex].prompt}
+
+Visual style:
+${t.styles[styleIndex].prompt}
+
+Layout:
+${t.layouts[layoutIndex].prompt}
+
+Aspect ratio:
+${ratio}
+
+Quality:
+premium AI image, clean composition, beautiful lighting, commercially usable, no watermark, no messy text, no distorted objects.
+`;
+
+    try {
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: finalPrompt,
+          ratio,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (result.image) {
+        setImage(result.image);
+      } else {
+        alert(result.error || "Error");
+      }
+    } catch {
+      alert("Server error");
+    }
+
+    setLoading(false);
   }
 
-  .creator,
-  .preview {
-    padding: 16px;
-    border-radius: 26px;
+  function downloadImage() {
+    if (!image) return;
+
+    const a = document.createElement("a");
+    a.href = image;
+    a.download = "moricanvas-ai.png";
+    a.click();
   }
 
-  .sectionCard {
-    padding: 16px;
-    border-radius: 22px;
+  function copyShareText() {
+    const text =
+      lang === "jp"
+        ? "MoriCanvas AIで画像を生成しました。"
+        : lang === "en"
+          ? "I created this image with MoriCanvas AI."
+          : "我用 MoriCanvas AI 生成了一张图片。";
+
+    navigator.clipboard.writeText(text);
   }
+
+  return (
+    <main className="app">
+      <header className="topbar">
+        <div className="brand">
+          <div className="brandIcon">M</div>
+          <div>
+            <strong>MoriCanvas AI</strong>
+            <small>AI Image Studio</small>
+          </div>
+        </div>
+
+        <div className="topActions">
+          <div className="languageTabs">
+            <button
+              className={lang === "jp" ? "active" : ""}
+              onClick={() => setLang("jp")}
+            >
+              日本語
+            </button>
+            <button
+              className={lang === "en" ? "active" : ""}
+              onClick={() => setLang("en")}
+            >
+              English
+            </button>
+            <button
+              className={lang === "cn" ? "active" : ""}
+              onClick={() => setLang("cn")}
+            >
+              中文
+            </button>
+          </div>
+
+          <span className="pill">{user ? user.email : t.guest}</span>
+
+          {user ? (
+            <button className="ghostBtn" onClick={signOut}>
+              {t.navLogout}
+            </button>
+          ) : (
+            <button className="ghostBtn" onClick={() => setShowAuth(true)}>
+              {t.navLogin}
+            </button>
+          )}
+        </div>
+      </header>
+
+      {showAuth && !user && (
+        <div className="modalOverlay" onClick={() => setShowAuth(false)}>
+          <section className="authModal" onClick={(e) => e.stopPropagation()}>
+            <div className="authHeader">
+              <h2>{t.navLogin}</h2>
+              <button onClick={() => setShowAuth(false)}>{t.close}</button>
+            </div>
+
+            <input
+              placeholder={t.email}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <input
+              placeholder={t.password}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <div className="authButtons">
+              <button onClick={signIn}>{t.signIn}</button>
+              <button onClick={signUp}>{t.signUp}</button>
+            </div>
+          </section>
+        </div>
+      )}
+
+      <section className="hero">
+        <p className="eyebrow">{t.eyebrow}</p>
+        <h1>{t.title}</h1>
+        <p className="heroText">{t.subtitle}</p>
+      </section>
+
+      <section className="workspace">
+        <section className="creator">
+          <div className="statusGrid">
+            <div>
+              <span>{t.plan}</span>
+              <strong>{user ? user.email : t.guest}</strong>
+            </div>
+            <div>
+              <span>Credits</span>
+              <strong>{t.credits}</strong>
+            </div>
+          </div>
+
+          <div className="sectionCard">
+            <h3>{t.useCase}</h3>
+            <div className="presetGrid">
+              {t.presets.map((item, index) => (
+                <button
+                  key={item.label}
+                  className={presetIndex === index ? "preset active" : "preset"}
+                  onClick={() => setPresetIndex(index)}
+                >
+                  <strong>{item.label}</strong>
+                  <span>{item.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="sectionCard">
+            <h3>{t.promptTitle}</h3>
+            <textarea
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder={t.placeholder}
+            />
+          </div>
+
+          <div className="sectionCard">
+            <h3>{t.styleTitle}</h3>
+            <div className="chips">
+              {t.styles.map((item, index) => (
+                <button
+                  key={item.label}
+                  className={styleIndex === index ? "chip active" : "chip"}
+                  onClick={() => setStyleIndex(index)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="twoColumns">
+            <div className="sectionCard">
+              <h3>{t.layoutTitle}</h3>
+              <div className="chips">
+                {t.layouts.map((item, index) => (
+                  <button
+                    key={item.label}
+                    className={layoutIndex === index ? "chip active" : "chip"}
+                    onClick={() => setLayoutIndex(index)}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="sectionCard">
+              <h3>{t.ratioTitle}</h3>
+              <div className="chips">
+                {ratios.map((item) => (
+                  <button
+                    key={item}
+                    className={ratio === item ? "chip active" : "chip"}
+                    onClick={() => setRatio(item)}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <button
+            className="generateBtn"
+            onClick={generateImage}
+            disabled={loading}
+          >
+            {loading ? t.generating : t.generate}
+          </button>
+        </section>
+
+        <aside className="preview">
+          <div className="previewTop">
+            <div>
+              <span>{t.preview}</span>
+              <h2>
+                {t.presets[presetIndex].label} · {t.styles[styleIndex].label}
+              </h2>
+            </div>
+            <em>{ratio}</em>
+          </div>
+
+          <div className="canvas">
+            {loading && <div className="loading">{t.generating}</div>}
+
+            {!loading && !image && (
+              <div className="empty">
+                <b>✦</b>
+                <p>{t.waiting}</p>
+              </div>
+            )}
+
+            {image && <img src={image} alt="Generated" />}
+          </div>
+
+          <div className="toolRow">
+            <button disabled>{t.history}</button>
+            <button disabled>{t.batch}</button>
+            <button disabled>{t.edit}</button>
+          </div>
+
+          {image && (
+            <div className="actions">
+              <button onClick={downloadImage}>{t.download}</button>
+              <button onClick={copyShareText}>{t.share}</button>
+            </div>
+          )}
+        </aside>
+      </section>
+    </main>
+  );
 }
