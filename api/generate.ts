@@ -1,14 +1,29 @@
-declare const process: any
+declare const process: any;
+
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { prompt } = req.body;
+    const { prompt, ratio } = req.body;
 
     if (!prompt) {
       return res.status(400).json({ error: "Prompt is required" });
+    }
+
+    let size = "1024x1024";
+
+    if (ratio === "16:9") {
+      size = "1536x1024";
+    }
+
+    if (ratio === "9:16") {
+      size = "1024x1536";
+    }
+
+    if (ratio === "4:5") {
+      size = "1024x1536";
     }
 
     const response = await fetch("https://api.openai.com/v1/images/generations", {
@@ -20,7 +35,7 @@ export default async function handler(req: any, res: any) {
       body: JSON.stringify({
         model: "gpt-image-1",
         prompt,
-        size: "1024x1024",
+        size,
       }),
     });
 
@@ -28,7 +43,7 @@ export default async function handler(req: any, res: any) {
 
     if (!response.ok) {
       return res.status(response.status).json({
-        error: data.error?.message || "OpenAI image generation failed",
+        error: data.error?.message || "Image generation failed",
       });
     }
 
@@ -39,7 +54,7 @@ export default async function handler(req: any, res: any) {
     }
 
     return res.status(200).json({
-      imageUrl: `data:image/png;base64,${base64Image}`,
+      image: `data:image/png;base64,${base64Image}`,
     });
   } catch (error: any) {
     return res.status(500).json({
