@@ -148,7 +148,7 @@ premium AI image, refined composition, commercially usable, clean details, beaut
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: finalPrompt }),
+        body: JSON.stringify({ prompt: finalPrompt, ratio: ratio.name }),
       });
 
       const data = await res.json();
