@@ -50,7 +50,7 @@ const data = {
       },
       {
         label: "SNS表紙",
-        desc: "投稿・小红书・Threads向け",
+        desc: "投稿・小紅書・Threads向け",
         prompt:
           "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space",
       },
@@ -69,7 +69,7 @@ const data = {
     ],
     styles: [
       {
-        label: "日系雑誌",
+        label: "雑誌風",
         prompt:
           "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition",
       },
@@ -84,7 +84,7 @@ const data = {
           "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere",
       },
       {
-        label: "写実",
+        label: "実写風",
         prompt:
           "high-end photorealistic commercial photography, realistic texture, premium details",
       },
