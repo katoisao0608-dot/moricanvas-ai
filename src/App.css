@@ -631,3 +631,97 @@ input:focus {
   object-fit: cover;
   display: block;
 }
+.pricingModal {
+  width: min(1040px, calc(100vw - 32px));
+  max-height: 88vh;
+  overflow: auto;
+  border-radius: 34px;
+  background: #fffaf2;
+  padding: 30px;
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.28);
+}
+
+.pricingModal .authHeader {
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.pricingModal .authHeader h2 {
+  margin: 0 0 8px;
+  font-size: clamp(26px, 4vw, 42px);
+  letter-spacing: -0.05em;
+}
+
+.pricingModal .authHeader p {
+  margin: 0;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.pricingModal h3 {
+  margin: 22px 0 14px;
+  text-align: left;
+}
+
+.pricingGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.pricingCard {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 24px;
+  padding: 20px;
+  background: white;
+  display: grid;
+  gap: 10px;
+}
+
+.pricingCard.featured {
+  background: linear-gradient(135deg, #f2ffe1, #fff7e8);
+}
+
+.pricingCard span {
+  font-weight: 900;
+  color: #475569;
+}
+
+.pricingCard strong {
+  font-size: 28px;
+  letter-spacing: -0.04em;
+}
+
+.pricingCard p {
+  margin: 0;
+  font-weight: 900;
+}
+
+.pricingCard small {
+  min-height: 34px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.pricingCard button {
+  border: none;
+  border-radius: 999px;
+  padding: 13px 18px;
+  background: #0f172a;
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.pricingNote {
+  margin: 22px 0 0;
+  color: #64748b;
+  font-weight: 800;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .pricingGrid {
+    grid-template-columns: 1fr;
+  }
+}
