@@ -26,6 +26,9 @@ const data = {
     subtitle: "用途、雰囲気、比率を選ぶと、生成される画像の方向性が変わります。",
     useCase: "用途",
     promptTitle: "画像の説明",
+    referenceImage: "参考画像",
+    uploadImage: "画像をアップロード",
+    removeImage: "削除",
     styleTitle: "雰囲気",
     layoutTitle: "レイアウト",
     ratioTitle: "比率",
@@ -44,71 +47,23 @@ const data = {
     needLogin: "先にログインしてください。",
     noCredits: "残り枚数がありません。購入機能を追加してください。",
     presets: [
-      {
-        label: "民泊PR",
-        desc: "宿泊施設や古民家の宣伝向け",
-        prompt:
-          "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual",
-      },
-      {
-        label: "SNS表紙",
-        desc: "投稿・小紅書・Threads向け",
-        prompt:
-          "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space",
-      },
-      {
-        label: "ペット写真",
-        desc: "犬・猫・ペットブランド向け",
-        prompt:
-          "premium pet portrait, warm emotional lighting, clean background, charming animal expression",
-      },
-      {
-        label: "旅行ポスター",
-        desc: "旅・地域紹介・観光向け",
-        prompt:
-          "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood",
-      },
+      { label: "民泊PR", desc: "宿泊施設や古民家の宣伝向け", prompt: "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual" },
+      { label: "SNS表紙", desc: "投稿・小紅書・Threads向け", prompt: "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space" },
+      { label: "ペット写真", desc: "犬・猫・ペットブランド向け", prompt: "premium pet portrait, warm emotional lighting, clean background, charming animal expression" },
+      { label: "旅行ポスター", desc: "旅・地域紹介・観光向け", prompt: "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood" },
     ],
     styles: [
-      {
-        label: "雑誌風",
-        prompt:
-          "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition",
-      },
-      {
-        label: "映画風",
-        prompt:
-          "cinematic film still, atmospheric depth, premium lighting, elegant color grading",
-      },
-      {
-        label: "手描き",
-        prompt:
-          "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere",
-      },
-      {
-        label: "実写風",
-        prompt:
-          "high-end photorealistic commercial photography, realistic texture, premium details",
-      },
+      { label: "雑誌風", prompt: "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition" },
+      { label: "映画風", prompt: "cinematic film still, atmospheric depth, premium lighting, elegant color grading" },
+      { label: "手描き", prompt: "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere" },
+      { label: "実写風", prompt: "high-end photorealistic commercial photography, realistic texture, premium details" },
     ],
     layouts: [
-      {
-        label: "文字なし",
-        prompt: "no text, no letters, no logo, image only",
-      },
-      {
-        label: "タイトル余白",
-        prompt:
-          "large clean negative space for future title placement, no readable text",
-      },
-      {
-        label: "ポスター構図",
-        prompt:
-          "poster-like composition, strong visual hierarchy, refined blank area, no readable text",
-      },
+      { label: "文字なし", prompt: "no text, no letters, no logo, image only" },
+      { label: "タイトル余白", prompt: "large clean negative space for future title placement, no readable text" },
+      { label: "ポスター構図", prompt: "poster-like composition, strong visual hierarchy, refined blank area, no readable text" },
     ],
   },
-
   en: {
     navLogin: "Log in",
     navLogout: "Log out",
@@ -122,10 +77,12 @@ const data = {
     creditsLabel: "Credits",
     eyebrow: "AI Image · Stay · Pet · Travel · Social",
     title: "Create publish-ready images from one sentence",
-    subtitle:
-      "Choose use case, mood, layout and ratio. Each option shapes the final image.",
+    subtitle: "Choose use case, mood, layout and ratio. Each option shapes the final image.",
     useCase: "Use case",
     promptTitle: "Image description",
+    referenceImage: "Reference image",
+    uploadImage: "Upload image",
+    removeImage: "Remove",
     styleTitle: "Mood",
     layoutTitle: "Layout",
     ratioTitle: "Ratio",
@@ -138,78 +95,29 @@ const data = {
     edit: "AI Edit",
     batch: "Batch",
     share: "Copy share text",
-    placeholder:
-      "Example: A pet-friendly old Japanese guesthouse in North Kanto, a Shiba Inu by the wooden entrance, warm evening light.",
+    placeholder: "Example: A pet-friendly old Japanese guesthouse in North Kanto, a Shiba Inu by the wooden entrance, warm evening light.",
     registerSuccess: "Account created. Please log in.",
     loginSuccess: "Logged in successfully.",
     needLogin: "Please log in first.",
     noCredits: "You do not have enough credits. Add a payment function next.",
     presets: [
-      {
-        label: "Stay Promo",
-        desc: "For guesthouses and old houses",
-        prompt:
-          "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual",
-      },
-      {
-        label: "Social Cover",
-        desc: "For social posts and covers",
-        prompt:
-          "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space",
-      },
-      {
-        label: "Pet Portrait",
-        desc: "For dogs, cats and pet brands",
-        prompt:
-          "premium pet portrait, warm emotional lighting, clean background, charming animal expression",
-      },
-      {
-        label: "Travel Poster",
-        desc: "For travel and local promotion",
-        prompt:
-          "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood",
-      },
+      { label: "Stay Promo", desc: "For guesthouses and old houses", prompt: "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual" },
+      { label: "Social Cover", desc: "For social posts and covers", prompt: "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space" },
+      { label: "Pet Portrait", desc: "For dogs, cats and pet brands", prompt: "premium pet portrait, warm emotional lighting, clean background, charming animal expression" },
+      { label: "Travel Poster", desc: "For travel and local promotion", prompt: "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood" },
     ],
     styles: [
-      {
-        label: "Magazine",
-        prompt:
-          "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition",
-      },
-      {
-        label: "Cinematic",
-        prompt:
-          "cinematic film still, atmospheric depth, premium lighting, elegant color grading",
-      },
-      {
-        label: "Hand-drawn",
-        prompt:
-          "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere",
-      },
-      {
-        label: "Realistic",
-        prompt:
-          "high-end photorealistic commercial photography, realistic texture, premium details",
-      },
+      { label: "Magazine", prompt: "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition" },
+      { label: "Cinematic", prompt: "cinematic film still, atmospheric depth, premium lighting, elegant color grading" },
+      { label: "Hand-drawn", prompt: "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere" },
+      { label: "Realistic", prompt: "high-end photorealistic commercial photography, realistic texture, premium details" },
     ],
     layouts: [
-      {
-        label: "No text",
-        prompt: "no text, no letters, no logo, image only",
-      },
-      {
-        label: "Title space",
-        prompt:
-          "large clean negative space for future title placement, no readable text",
-      },
-      {
-        label: "Poster layout",
-        prompt:
-          "poster-like composition, strong visual hierarchy, refined blank area, no readable text",
-      },
+      { label: "No text", prompt: "no text, no letters, no logo, image only" },
+      { label: "Title space", prompt: "large clean negative space for future title placement, no readable text" },
+      { label: "Poster layout", prompt: "poster-like composition, strong visual hierarchy, refined blank area, no readable text" },
     ],
   },
-
   cn: {
     navLogin: "登录",
     navLogout: "退出",
@@ -223,10 +131,12 @@ const data = {
     creditsLabel: "剩余",
     eyebrow: "AI 图片生成 · 民宿 · 宠物 · 旅行 · 社交媒体",
     title: "输入一句话，生成适合发布的图片",
-    subtitle:
-      "选择用途、氛围、排版和比例，每一个选项都会影响最终生成结果。",
+    subtitle: "选择用途、氛围、排版和比例，每一个选项都会影响最终生成结果。",
     useCase: "用途",
     promptTitle: "画面描述",
+    referenceImage: "参考图片",
+    uploadImage: "上传图片",
+    removeImage: "删除",
     styleTitle: "氛围",
     layoutTitle: "排版",
     ratioTitle: "比例",
@@ -239,75 +149,27 @@ const data = {
     edit: "AI 修图",
     batch: "批量生成",
     share: "复制分享文案",
-    placeholder:
-      "例：北关东一栋可带宠物入住的日式老民宿，柴犬坐在木门前，傍晚暖光。",
+    placeholder: "例：北关东一栋可带宠物入住的日式老民宿，柴犬坐在木门前，傍晚暖光。",
     registerSuccess: "注册成功，请登录。",
     loginSuccess: "登录成功。",
     needLogin: "请先登录。",
     noCredits: "剩余点数不足。下一步需要接入购买点数功能。",
     presets: [
-      {
-        label: "民宿宣传",
-        desc: "适合民宿、老房、住宿宣传",
-        prompt:
-          "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual",
-      },
-      {
-        label: "社媒封面",
-        desc: "适合小红书、Threads、封面图",
-        prompt:
-          "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space",
-      },
-      {
-        label: "宠物写真",
-        desc: "适合狗、猫、宠物品牌",
-        prompt:
-          "premium pet portrait, warm emotional lighting, clean background, charming animal expression",
-      },
-      {
-        label: "旅行海报",
-        desc: "适合旅行、地区介绍、观光宣传",
-        prompt:
-          "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood",
-      },
+      { label: "民宿宣传", desc: "适合民宿、老房、住宿宣传", prompt: "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual" },
+      { label: "社媒封面", desc: "适合小红书、Threads、封面图", prompt: "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space" },
+      { label: "宠物写真", desc: "适合狗、猫、宠物品牌", prompt: "premium pet portrait, warm emotional lighting, clean background, charming animal expression" },
+      { label: "旅行海报", desc: "适合旅行、地区介绍、观光宣传", prompt: "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood" },
     ],
     styles: [
-      {
-        label: "日系杂志",
-        prompt:
-          "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition",
-      },
-      {
-        label: "电影感",
-        prompt:
-          "cinematic film still, atmospheric depth, premium lighting, elegant color grading",
-      },
-      {
-        label: "手绘",
-        prompt:
-          "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere",
-      },
-      {
-        label: "写实",
-        prompt:
-          "high-end photorealistic commercial photography, realistic texture, premium details",
-      },
+      { label: "日系杂志", prompt: "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition" },
+      { label: "电影感", prompt: "cinematic film still, atmospheric depth, premium lighting, elegant color grading" },
+      { label: "手绘", prompt: "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere" },
+      { label: "写实", prompt: "high-end photorealistic commercial photography, realistic texture, premium details" },
     ],
     layouts: [
-      {
-        label: "无文字",
-        prompt: "no text, no letters, no logo, image only",
-      },
-      {
-        label: "标题留白",
-        prompt:
-          "large clean negative space for future title placement, no readable text",
-      },
-      {
-        label: "海报构图",
-        prompt:
-          "poster-like composition, strong visual hierarchy, refined blank area, no readable text",
-      },
+      { label: "无文字", prompt: "no text, no letters, no logo, image only" },
+      { label: "标题留白", prompt: "large clean negative space for future title placement, no readable text" },
+      { label: "海报构图", prompt: "poster-like composition, strong visual hierarchy, refined blank area, no readable text" },
     ],
   },
 };
@@ -320,6 +182,7 @@ export default function App() {
 
   const [prompt, setPrompt] = useState("");
   const [image, setImage] = useState("");
+  const [referenceImage, setReferenceImage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [presetIndex, setPresetIndex] = useState(0);
@@ -448,6 +311,23 @@ export default function App() {
     setCredits(0);
   }
 
+  function handleReferenceUpload(file: File | null) {
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload an image file.");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setReferenceImage(String(reader.result));
+    };
+
+    reader.readAsDataURL(file);
+  }
+
   async function generateImage() {
     if (!user) {
       alert(t.needLogin);
@@ -460,7 +340,7 @@ export default function App() {
       return;
     }
 
-    if (!prompt.trim()) return;
+    if (!prompt.trim() && !referenceImage) return;
 
     setLoading(true);
     setImage("");
@@ -468,6 +348,9 @@ export default function App() {
     const finalPrompt = `
 Main idea:
 ${prompt}
+
+Reference image instruction:
+If a reference image is provided, use it as visual guidance for subject, composition, object identity, color mood or atmosphere. Do not copy watermarks or text.
 
 Use case:
 ${t.presets[presetIndex].prompt}
@@ -494,6 +377,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
         body: JSON.stringify({
           prompt: finalPrompt,
           ratio,
+          referenceImage,
         }),
       });
 
@@ -552,36 +436,17 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
 
         <div className="topActions">
           <div className="languageTabs">
-            <button
-              className={lang === "jp" ? "active" : ""}
-              onClick={() => setLang("jp")}
-            >
-              日本語
-            </button>
-            <button
-              className={lang === "en" ? "active" : ""}
-              onClick={() => setLang("en")}
-            >
-              English
-            </button>
-            <button
-              className={lang === "cn" ? "active" : ""}
-              onClick={() => setLang("cn")}
-            >
-              中文
-            </button>
+            <button className={lang === "jp" ? "active" : ""} onClick={() => setLang("jp")}>日本語</button>
+            <button className={lang === "en" ? "active" : ""} onClick={() => setLang("en")}>English</button>
+            <button className={lang === "cn" ? "active" : ""} onClick={() => setLang("cn")}>中文</button>
           </div>
 
           <span className="pill">{user ? user.email : t.guest}</span>
 
           {user ? (
-            <button className="ghostBtn" onClick={signOut}>
-              {t.navLogout}
-            </button>
+            <button className="ghostBtn" onClick={signOut}>{t.navLogout}</button>
           ) : (
-            <button className="ghostBtn" onClick={() => setShowAuth(true)}>
-              {t.navLogin}
-            </button>
+            <button className="ghostBtn" onClick={() => setShowAuth(true)}>{t.navLogin}</button>
           )}
         </div>
       </header>
@@ -594,18 +459,8 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
               <button onClick={() => setShowAuth(false)}>{t.close}</button>
             </div>
 
-            <input
-              placeholder={t.email}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            <input
-              placeholder={t.password}
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <input placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input placeholder={t.password} type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
             <div className="authButtons">
               <button onClick={signIn} disabled={authLoading}>
@@ -634,9 +489,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
             </div>
             <div>
               <span>Credits</span>
-              <strong>
-                {t.creditsLabel} {credits}
-              </strong>
+              <strong>{t.creditsLabel} {credits}</strong>
             </div>
           </div>
 
@@ -663,6 +516,26 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
               onChange={(e) => setPrompt(e.target.value)}
               placeholder={t.placeholder}
             />
+          </div>
+
+          <div className="sectionCard">
+            <h3>{t.referenceImage}</h3>
+
+            <label className="uploadBox">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleReferenceUpload(e.target.files?.[0] || null)}
+              />
+              <span>{t.uploadImage}</span>
+            </label>
+
+            {referenceImage && (
+              <div className="referencePreview">
+                <img src={referenceImage} alt="Reference" />
+                <button onClick={() => setReferenceImage("")}>{t.removeImage}</button>
+              </div>
+            )}
           </div>
 
           <div className="sectionCard">
@@ -712,11 +585,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
             </div>
           </div>
 
-          <button
-            className="generateBtn"
-            onClick={generateImage}
-            disabled={loading}
-          >
+          <button className="generateBtn" onClick={generateImage} disabled={loading}>
             {loading ? t.generating : t.generate}
           </button>
         </section>
@@ -725,9 +594,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
           <div className="previewTop">
             <div>
               <span>{t.preview}</span>
-              <h2>
-                {t.presets[presetIndex].label} · {t.styles[styleIndex].label}
-              </h2>
+              <h2>{t.presets[presetIndex].label} · {t.styles[styleIndex].label}</h2>
             </div>
             <em>{ratio}</em>
           </div>
