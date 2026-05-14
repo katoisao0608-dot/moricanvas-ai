@@ -603,3 +603,31 @@ input:focus {
   color: white;
   font-weight: 900;
 }
+.historyPanel {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.historyPanel p {
+  grid-column: 1 / -1;
+  color: #6b7280;
+  font-weight: 800;
+  text-align: center;
+}
+
+.historyItem {
+  padding: 0;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: transparent;
+}
+
+.historyItem img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
