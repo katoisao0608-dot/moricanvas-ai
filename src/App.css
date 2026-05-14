@@ -562,3 +562,44 @@ input:focus {
     grid-template-columns: 1fr;
   }
 }
+.uploadBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 96px;
+  border: 1.5px dashed rgba(17, 24, 39, 0.22);
+  border-radius: 22px;
+  background: #ffffff;
+  color: #111827;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.uploadBox input {
+  display: none;
+}
+
+.referencePreview {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 14px;
+  align-items: center;
+}
+
+.referencePreview img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+}
+
+.referencePreview button {
+  padding: 13px 16px;
+  border: none;
+  border-radius: 18px;
+  background: #111827;
+  color: white;
+  font-weight: 900;
+}
