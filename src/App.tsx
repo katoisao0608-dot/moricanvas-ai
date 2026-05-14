@@ -46,6 +46,7 @@ const data = {
     loginSuccess: "ログインしました。",
     needLogin: "先にログインしてください。",
     noCredits: "残り枚数がありません。",
+    noHistory: "履歴はまだありません。",
     presets: [
       {
         label: "民泊PR",
@@ -129,6 +130,7 @@ const data = {
     loginSuccess: "Logged in successfully.",
     needLogin: "Please log in first.",
     noCredits: "No credits left.",
+    noHistory: "No history yet.",
     presets: [
       {
         label: "Stay Promo",
@@ -212,6 +214,7 @@ const data = {
     loginSuccess: "登录成功。",
     needLogin: "请先登录。",
     noCredits: "剩余点数不足。",
+    noHistory: "还没有历史记录。",
     presets: [
       {
         label: "民宿宣传",
@@ -269,6 +272,8 @@ export default function App() {
   const [prompt, setPrompt] = useState("");
   const [image, setImage] = useState("");
   const [referenceImage, setReferenceImage] = useState("");
+  const [historyImages, setHistoryImages] = useState<any[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [presetIndex, setPresetIndex] = useState(0);
@@ -283,6 +288,17 @@ export default function App() {
   const [authLoading, setAuthLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  async function loadHistory(userId: string) {
+    const { data } = await supabase
+      .from("images")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(12);
+
+    setHistoryImages(data || []);
+  }
 
   async function loadProfile(userId: string, userEmail?: string) {
     const { data: profile } = await supabase
@@ -321,6 +337,7 @@ export default function App() {
       if (data.session?.user) {
         setUser(data.session.user);
         await loadProfile(data.session.user.id, data.session.user.email || "");
+        await loadHistory(data.session.user.id);
       }
     });
 
@@ -329,9 +346,11 @@ export default function App() {
         if (session?.user) {
           setUser(session.user);
           await loadProfile(session.user.id, session.user.email || "");
+          await loadHistory(session.user.id);
         } else {
           setUser(null);
           setCredits(5);
+          setHistoryImages([]);
         }
       }
     );
@@ -366,6 +385,7 @@ export default function App() {
 
     if (authData.user) {
       await loadProfile(authData.user.id, authData.user.email || email);
+      await loadHistory(authData.user.id);
     }
 
     alert(t.registerSuccess);
@@ -395,6 +415,7 @@ export default function App() {
     if (authData.user) {
       setUser(authData.user);
       await loadProfile(authData.user.id, authData.user.email || email);
+      await loadHistory(authData.user.id);
     }
 
     alert(t.loginSuccess);
@@ -410,39 +431,15 @@ export default function App() {
 
     setUser(null);
     setCredits(5);
+    setHistoryImages([]);
     setShowAuth(false);
     setEmail("");
     setPassword("");
 
-    const keysToRemove: string[] = [];
-
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key) keysToRemove.push(key);
-    }
-
-    keysToRemove.forEach((key) => {
-      if (
-        key.includes("supabase") ||
-        key.includes("sb-") ||
-        key.includes("auth-token") ||
-        key.includes("moricanvas")
-      ) {
-        localStorage.removeItem(key);
-      }
-    });
-
+    localStorage.clear();
     sessionStorage.clear();
 
-    document.cookie.split(";").forEach((cookie) => {
-      const name = cookie.split("=")[0].trim();
-      document.cookie =
-        name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
-    });
-
-    window.location.replace(
-      window.location.origin + "/?logout=" + Date.now()
-    );
+    window.location.replace(window.location.origin + "/?logout=" + Date.now());
   }
 
   function handleReferenceUpload(file: File | null) {
@@ -520,6 +517,15 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
       if (result.image) {
         setImage(result.image);
 
+        await supabase.from("images").insert({
+          user_id: user.id,
+          image_url: result.image,
+          prompt: finalPrompt,
+          ratio,
+        });
+
+        await loadHistory(user.id);
+
         const newCredits = Math.max(credits - 1, 0);
         setCredits(newCredits);
 
@@ -570,27 +576,9 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
 
         <div className="topActions">
           <div className="languageTabs">
-            <button
-              type="button"
-              className={lang === "jp" ? "active" : ""}
-              onClick={() => setLang("jp")}
-            >
-              日本語
-            </button>
-            <button
-              type="button"
-              className={lang === "en" ? "active" : ""}
-              onClick={() => setLang("en")}
-            >
-              English
-            </button>
-            <button
-              type="button"
-              className={lang === "cn" ? "active" : ""}
-              onClick={() => setLang("cn")}
-            >
-              中文
-            </button>
+            <button type="button" className={lang === "jp" ? "active" : ""} onClick={() => setLang("jp")}>日本語</button>
+            <button type="button" className={lang === "en" ? "active" : ""} onClick={() => setLang("en")}>English</button>
+            <button type="button" className={lang === "cn" ? "active" : ""} onClick={() => setLang("cn")}>中文</button>
           </div>
 
           <span className="pill">{user ? user.email : t.guest}</span>
@@ -600,11 +588,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
               {t.navLogout}
             </button>
           ) : (
-            <button
-              type="button"
-              className="ghostBtn"
-              onClick={() => setShowAuth(true)}
-            >
+            <button type="button" className="ghostBtn" onClick={() => setShowAuth(true)}>
               {t.navLogin}
             </button>
           )}
@@ -621,18 +605,8 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
               </button>
             </div>
 
-            <input
-              placeholder={t.email}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            <input
-              placeholder={t.password}
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <input placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input placeholder={t.password} type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
             <div className="authButtons">
               <button type="button" onClick={signIn} disabled={authLoading}>
@@ -661,9 +635,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
             </div>
             <div>
               <span>Credits</span>
-              <strong>
-                {t.creditsLabel} {credits}
-              </strong>
+              <strong>{t.creditsLabel} {credits}</strong>
             </div>
           </div>
 
@@ -671,12 +643,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
             <h3>{t.useCase}</h3>
             <div className="presetGrid">
               {t.presets.map((item, index) => (
-                <button
-                  type="button"
-                  key={item.label}
-                  className={presetIndex === index ? "preset active" : "preset"}
-                  onClick={() => setPresetIndex(index)}
-                >
+                <button type="button" key={item.label} className={presetIndex === index ? "preset active" : "preset"} onClick={() => setPresetIndex(index)}>
                   <strong>{item.label}</strong>
                   <span>{item.desc}</span>
                 </button>
@@ -686,24 +653,14 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
 
           <div className="sectionCard">
             <h3>{t.promptTitle}</h3>
-            <textarea
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder={t.placeholder}
-            />
+            <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder={t.placeholder} />
           </div>
 
           <div className="sectionCard">
             <h3>{t.referenceImage}</h3>
 
             <label className="uploadBox">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  handleReferenceUpload(e.target.files?.[0] || null)
-                }
-              />
+              <input type="file" accept="image/*" onChange={(e) => handleReferenceUpload(e.target.files?.[0] || null)} />
               <span>{t.uploadImage}</span>
             </label>
 
@@ -721,12 +678,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
             <h3>{t.styleTitle}</h3>
             <div className="chips">
               {t.styles.map((item, index) => (
-                <button
-                  type="button"
-                  key={item.label}
-                  className={styleIndex === index ? "chip active" : "chip"}
-                  onClick={() => setStyleIndex(index)}
-                >
+                <button type="button" key={item.label} className={styleIndex === index ? "chip active" : "chip"} onClick={() => setStyleIndex(index)}>
                   {item.label}
                 </button>
               ))}
@@ -738,12 +690,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
               <h3>{t.layoutTitle}</h3>
               <div className="chips">
                 {t.layouts.map((item, index) => (
-                  <button
-                    type="button"
-                    key={item.label}
-                    className={layoutIndex === index ? "chip active" : "chip"}
-                    onClick={() => setLayoutIndex(index)}
-                  >
+                  <button type="button" key={item.label} className={layoutIndex === index ? "chip active" : "chip"} onClick={() => setLayoutIndex(index)}>
                     {item.label}
                   </button>
                 ))}
@@ -754,12 +701,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
               <h3>{t.ratioTitle}</h3>
               <div className="chips">
                 {ratios.map((item) => (
-                  <button
-                    type="button"
-                    key={item}
-                    className={ratio === item ? "chip active" : "chip"}
-                    onClick={() => setRatio(item)}
-                  >
+                  <button type="button" key={item} className={ratio === item ? "chip active" : "chip"} onClick={() => setRatio(item)}>
                     {item}
                   </button>
                 ))}
@@ -767,12 +709,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
             </div>
           </div>
 
-          <button
-            type="button"
-            className="generateBtn"
-            onClick={generateImage}
-            disabled={loading}
-          >
+          <button type="button" className="generateBtn" onClick={generateImage} disabled={loading}>
             {loading ? t.generating : t.generate}
           </button>
         </section>
@@ -781,9 +718,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
           <div className="previewTop">
             <div>
               <span>{t.preview}</span>
-              <h2>
-                {t.presets[presetIndex].label} · {t.styles[styleIndex].label}
-              </h2>
+              <h2>{t.presets[presetIndex].label} · {t.styles[styleIndex].label}</h2>
             </div>
             <em>{ratio}</em>
           </div>
@@ -801,26 +736,35 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
             {image && <img src={image} alt="Generated" />}
           </div>
 
+          {showHistory && (
+            <div className="historyPanel">
+              {historyImages.length === 0 && <p>{t.noHistory}</p>}
+
+              {historyImages.map((item) => (
+                <button
+                  type="button"
+                  key={item.id}
+                  className="historyItem"
+                  onClick={() => setImage(item.image_url)}
+                >
+                  <img src={item.image_url} alt="History" />
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="toolRow">
-            <button type="button" disabled>
+            <button type="button" onClick={() => setShowHistory(!showHistory)}>
               {t.history}
             </button>
-            <button type="button" disabled>
-              {t.batch}
-            </button>
-            <button type="button" disabled>
-              {t.edit}
-            </button>
+            <button type="button" disabled>{t.batch}</button>
+            <button type="button" disabled>{t.edit}</button>
           </div>
 
           {image && (
             <div className="actions">
-              <button type="button" onClick={downloadImage}>
-                {t.download}
-              </button>
-              <button type="button" onClick={copyShareText}>
-                {t.share}
-              </button>
+              <button type="button" onClick={downloadImage}>{t.download}</button>
+              <button type="button" onClick={copyShareText}>{t.share}</button>
             </div>
           )}
         </aside>
