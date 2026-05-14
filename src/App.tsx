@@ -13,6 +13,7 @@ const data = {
   jp: {
     navLogin: "ログイン",
     navLogout: "ログアウト",
+    pricing: "料金プラン",
     guest: "ゲスト",
     email: "メールアドレス",
     password: "パスワード",
@@ -23,10 +24,21 @@ const data = {
     creditsLabel: "残り",
     buyCredits: "クレジット購入",
     monthlyPlan: "月額プラン",
+    pricingTitle: "用途に合わせて選べる料金プラン",
+    pricingSubtitle: "まずは無料クレジットで試して、必要に応じて追加購入または月額プランへ。",
+    oneTimeTitle: "一回購入",
+    subscriptionTitle: "月額サブスクリプション",
+    starterDesc: "まず試したい方向け",
+    creatorDesc: "SNS投稿や民泊運営向け",
+    proDesc: "本格的に使いたい方向け",
+    liteDesc: "毎月少し使う方向け",
+    creatorMonthlyDesc: "継続的に画像を作る方向け",
+    studioDesc: "チーム・運営代行・商用向け",
+    commercial: "商用利用可・いつでも解約可能",
+    pay: "購入する",
     eyebrow: "AI画像生成 · 民泊 · ペット · 旅行 · SNS",
     title: "一文から、投稿に使える画像を生成",
-    subtitle:
-      "用途、雰囲気、比率を選ぶと、生成される画像の方向性が変わります。",
+    subtitle: "用途、雰囲気、比率を選ぶと、生成される画像の方向性が変わります。",
     useCase: "用途",
     promptTitle: "画像の説明",
     referenceImage: "参考画像",
@@ -44,8 +56,7 @@ const data = {
     edit: "AI修正",
     batch: "まとめて生成",
     share: "共有用にコピー",
-    placeholder:
-      "例：北関東のペット可の古民家宿、木の玄関に座る柴犬、夕方の温かい光。",
+    placeholder: "例：北関東のペット可の古民家宿、木の玄関に座る柴犬、夕方の温かい光。",
     registerSuccess: "登録が完了しました。ログインしてください。",
     loginSuccess: "ログインしました。",
     needLogin: "先にログインしてください。",
@@ -53,74 +64,28 @@ const data = {
     noHistory: "履歴はまだありません。",
     paymentError: "決済ページを開けませんでした。",
     presets: [
-      {
-        label: "民泊PR",
-        desc: "宿泊施設や古民家の宣伝向け",
-        prompt:
-          "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual",
-      },
-      {
-        label: "SNS表紙",
-        desc: "投稿・小紅書・Threads向け",
-        prompt:
-          "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space",
-      },
-      {
-        label: "ペット写真",
-        desc: "犬・猫・ペットブランド向け",
-        prompt:
-          "premium pet portrait, warm emotional lighting, clean background, charming animal expression",
-      },
-      {
-        label: "旅行ポスター",
-        desc: "旅・地域紹介・観光向け",
-        prompt:
-          "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood",
-      },
+      { label: "民泊PR", desc: "宿泊施設や古民家の宣伝向け", prompt: "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual" },
+      { label: "SNS表紙", desc: "投稿・小紅書・Threads向け", prompt: "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space" },
+      { label: "ペット写真", desc: "犬・猫・ペットブランド向け", prompt: "premium pet portrait, warm emotional lighting, clean background, charming animal expression" },
+      { label: "旅行ポスター", desc: "旅・地域紹介・観光向け", prompt: "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood" },
     ],
     styles: [
-      {
-        label: "雑誌風",
-        prompt:
-          "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition",
-      },
-      {
-        label: "映画風",
-        prompt:
-          "cinematic film still, atmospheric depth, premium lighting, elegant color grading",
-      },
-      {
-        label: "手描き",
-        prompt:
-          "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere",
-      },
-      {
-        label: "実写風",
-        prompt:
-          "high-end photorealistic commercial photography, realistic texture, premium details",
-      },
+      { label: "雑誌風", prompt: "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition" },
+      { label: "映画風", prompt: "cinematic film still, atmospheric depth, premium lighting, elegant color grading" },
+      { label: "手描き", prompt: "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere" },
+      { label: "実写風", prompt: "high-end photorealistic commercial photography, realistic texture, premium details" },
     ],
     layouts: [
-      {
-        label: "文字なし",
-        prompt: "no text, no letters, no logo, image only",
-      },
-      {
-        label: "タイトル余白",
-        prompt:
-          "large clean negative space for future title placement, no readable text",
-      },
-      {
-        label: "ポスター構図",
-        prompt:
-          "poster-like composition, strong visual hierarchy, refined blank area, no readable text",
-      },
+      { label: "文字なし", prompt: "no text, no letters, no logo, image only" },
+      { label: "タイトル余白", prompt: "large clean negative space for future title placement, no readable text" },
+      { label: "ポスター構図", prompt: "poster-like composition, strong visual hierarchy, refined blank area, no readable text" },
     ],
   },
 
   en: {
     navLogin: "Log in",
     navLogout: "Log out",
+    pricing: "Pricing",
     guest: "Guest",
     email: "Email",
     password: "Password",
@@ -131,10 +96,21 @@ const data = {
     creditsLabel: "Credits",
     buyCredits: "Buy credits",
     monthlyPlan: "Monthly plans",
+    pricingTitle: "Flexible plans for every creative workflow",
+    pricingSubtitle: "Start with free credits, then buy more credits or subscribe when you need more.",
+    oneTimeTitle: "One-time credits",
+    subscriptionTitle: "Monthly subscription",
+    starterDesc: "Best for testing",
+    creatorDesc: "For social posts and guesthouse owners",
+    proDesc: "For frequent image creation",
+    liteDesc: "For light monthly use",
+    creatorMonthlyDesc: "For regular creators",
+    studioDesc: "For teams, agencies and commercial work",
+    commercial: "Commercial use included · cancel anytime",
+    pay: "Buy now",
     eyebrow: "AI Image · Stay · Pet · Travel · Social",
     title: "Create publish-ready images from one sentence",
-    subtitle:
-      "Choose use case, mood, layout and ratio. Each option shapes the final image.",
+    subtitle: "Choose use case, mood, layout and ratio. Each option shapes the final image.",
     useCase: "Use case",
     promptTitle: "Image description",
     referenceImage: "Reference image",
@@ -152,8 +128,7 @@ const data = {
     edit: "AI Edit",
     batch: "Batch",
     share: "Copy share text",
-    placeholder:
-      "Example: A pet-friendly old Japanese guesthouse in North Kanto, a Shiba Inu by the wooden entrance, warm evening light.",
+    placeholder: "Example: A pet-friendly old Japanese guesthouse in North Kanto, a Shiba Inu by the wooden entrance, warm evening light.",
     registerSuccess: "Account created. Please log in.",
     loginSuccess: "Logged in successfully.",
     needLogin: "Please log in first.",
@@ -161,74 +136,28 @@ const data = {
     noHistory: "No history yet.",
     paymentError: "Could not open payment page.",
     presets: [
-      {
-        label: "Stay Promo",
-        desc: "For guesthouses and old houses",
-        prompt:
-          "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual",
-      },
-      {
-        label: "Social Cover",
-        desc: "For social posts and covers",
-        prompt:
-          "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space",
-      },
-      {
-        label: "Pet Portrait",
-        desc: "For dogs, cats and pet brands",
-        prompt:
-          "premium pet portrait, warm emotional lighting, clean background, charming animal expression",
-      },
-      {
-        label: "Travel Poster",
-        desc: "For travel and local promotion",
-        prompt:
-          "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood",
-      },
+      { label: "Stay Promo", desc: "For guesthouses and old houses", prompt: "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual" },
+      { label: "Social Cover", desc: "For social posts and covers", prompt: "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space" },
+      { label: "Pet Portrait", desc: "For dogs, cats and pet brands", prompt: "premium pet portrait, warm emotional lighting, clean background, charming animal expression" },
+      { label: "Travel Poster", desc: "For travel and local promotion", prompt: "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood" },
     ],
     styles: [
-      {
-        label: "Magazine",
-        prompt:
-          "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition",
-      },
-      {
-        label: "Cinematic",
-        prompt:
-          "cinematic film still, atmospheric depth, premium lighting, elegant color grading",
-      },
-      {
-        label: "Hand-drawn",
-        prompt:
-          "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere",
-      },
-      {
-        label: "Realistic",
-        prompt:
-          "high-end photorealistic commercial photography, realistic texture, premium details",
-      },
+      { label: "Magazine", prompt: "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition" },
+      { label: "Cinematic", prompt: "cinematic film still, atmospheric depth, premium lighting, elegant color grading" },
+      { label: "Hand-drawn", prompt: "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere" },
+      { label: "Realistic", prompt: "high-end photorealistic commercial photography, realistic texture, premium details" },
     ],
     layouts: [
-      {
-        label: "No text",
-        prompt: "no text, no letters, no logo, image only",
-      },
-      {
-        label: "Title space",
-        prompt:
-          "large clean negative space for future title placement, no readable text",
-      },
-      {
-        label: "Poster layout",
-        prompt:
-          "poster-like composition, strong visual hierarchy, refined blank area, no readable text",
-      },
+      { label: "No text", prompt: "no text, no letters, no logo, image only" },
+      { label: "Title space", prompt: "large clean negative space for future title placement, no readable text" },
+      { label: "Poster layout", prompt: "poster-like composition, strong visual hierarchy, refined blank area, no readable text" },
     ],
   },
 
   cn: {
     navLogin: "登录",
     navLogout: "退出",
+    pricing: "价格",
     guest: "游客",
     email: "邮箱",
     password: "密码",
@@ -239,10 +168,21 @@ const data = {
     creditsLabel: "剩余",
     buyCredits: "购买点数",
     monthlyPlan: "月度套餐",
+    pricingTitle: "适合不同用途的 AI 图片价格方案",
+    pricingSubtitle: "先用免费点数体验，需要更多图片时再购买点数或订阅月度套餐。",
+    oneTimeTitle: "一次性点数包",
+    subscriptionTitle: "月度订阅",
+    starterDesc: "适合先试用",
+    creatorDesc: "适合社媒发布和民宿运营",
+    proDesc: "适合高频生成",
+    liteDesc: "适合每月轻量使用",
+    creatorMonthlyDesc: "适合持续创作",
+    studioDesc: "适合团队、代运营、商用",
+    commercial: "支持商用 · 可随时取消",
+    pay: "购买",
     eyebrow: "AI 图片生成 · 民宿 · 宠物 · 旅行 · 社交媒体",
     title: "输入一句话，生成适合发布的图片",
-    subtitle:
-      "选择用途、氛围、排版和比例，每一个选项都会影响最终生成结果。",
+    subtitle: "选择用途、氛围、排版和比例，每一个选项都会影响最终生成结果。",
     useCase: "用途",
     promptTitle: "画面描述",
     referenceImage: "参考图片",
@@ -260,8 +200,7 @@ const data = {
     edit: "AI 修图",
     batch: "批量生成",
     share: "复制分享文案",
-    placeholder:
-      "例：北关东一栋可带宠物入住的日式老民宿，柴犬坐在木门前，傍晚暖光。",
+    placeholder: "例：北关东一栋可带宠物入住的日式老民宿，柴犬坐在木门前，傍晚暖光。",
     registerSuccess: "注册成功，请登录。",
     loginSuccess: "登录成功。",
     needLogin: "请先登录。",
@@ -269,73 +208,38 @@ const data = {
     noHistory: "还没有历史记录。",
     paymentError: "无法打开支付页面。",
     presets: [
-      {
-        label: "民宿宣传",
-        desc: "适合民宿、老房、住宿宣传",
-        prompt:
-          "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual",
-      },
-      {
-        label: "社媒封面",
-        desc: "适合小红书、Threads、封面图",
-        prompt:
-          "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space",
-      },
-      {
-        label: "宠物写真",
-        desc: "适合狗、猫、宠物品牌",
-        prompt:
-          "premium pet portrait, warm emotional lighting, clean background, charming animal expression",
-      },
-      {
-        label: "旅行海报",
-        desc: "适合旅行、地区介绍、观光宣传",
-        prompt:
-          "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood",
-      },
+      { label: "民宿宣传", desc: "适合民宿、老房、住宿宣传", prompt: "Japanese countryside guesthouse promotion image, pet-friendly stay, cozy wooden house, warm lights, accommodation campaign visual" },
+      { label: "社媒封面", desc: "适合小红书、Threads、封面图", prompt: "premium social media cover image, clean composition, trendy lifestyle visual, elegant negative space" },
+      { label: "宠物写真", desc: "适合狗、猫、宠物品牌", prompt: "premium pet portrait, warm emotional lighting, clean background, charming animal expression" },
+      { label: "旅行海报", desc: "适合旅行、地区介绍、观光宣传", prompt: "cinematic travel poster, poetic landscape, refined color palette, elegant destination mood" },
     ],
     styles: [
-      {
-        label: "日系杂志",
-        prompt:
-          "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition",
-      },
-      {
-        label: "电影感",
-        prompt:
-          "cinematic film still, atmospheric depth, premium lighting, elegant color grading",
-      },
-      {
-        label: "手绘",
-        prompt:
-          "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere",
-      },
-      {
-        label: "写实",
-        prompt:
-          "high-end photorealistic commercial photography, realistic texture, premium details",
-      },
+      { label: "日系杂志", prompt: "Japanese lifestyle magazine aesthetic, natural tones, quiet luxury, refined editorial composition" },
+      { label: "电影感", prompt: "cinematic film still, atmospheric depth, premium lighting, elegant color grading" },
+      { label: "手绘", prompt: "soft hand-drawn illustration, warm palette, gentle linework, poetic atmosphere" },
+      { label: "写实", prompt: "high-end photorealistic commercial photography, realistic texture, premium details" },
     ],
     layouts: [
-      {
-        label: "无文字",
-        prompt: "no text, no letters, no logo, image only",
-      },
-      {
-        label: "标题留白",
-        prompt:
-          "large clean negative space for future title placement, no readable text",
-      },
-      {
-        label: "海报构图",
-        prompt:
-          "poster-like composition, strong visual hierarchy, refined blank area, no readable text",
-      },
+      { label: "无文字", prompt: "no text, no letters, no logo, image only" },
+      { label: "标题留白", prompt: "large clean negative space for future title placement, no readable text" },
+      { label: "海报构图", prompt: "poster-like composition, strong visual hierarchy, refined blank area, no readable text" },
     ],
   },
 };
 
 const ratios = ["1:1", "4:5", "9:16", "16:9"];
+
+const creditPlans = [
+  { key: "starter", name: "Starter", price: "¥980", credits: "50" },
+  { key: "creator", name: "Creator", price: "¥1,980", credits: "150" },
+  { key: "pro", name: "Pro", price: "¥4,980", credits: "500" },
+];
+
+const monthlyPlans = [
+  { key: "lite_monthly", name: "Lite", price: "¥980/月", credits: "100" },
+  { key: "creator_monthly", name: "Creator", price: "¥2,980/月", credits: "500" },
+  { key: "studio_monthly", name: "Studio", price: "¥9,800/月", credits: "3000" },
+];
 
 export default function App() {
   const [lang, setLang] = useState<Lang>("jp");
@@ -346,6 +250,7 @@ export default function App() {
   const [referenceImage, setReferenceImage] = useState("");
   const [historyImages, setHistoryImages] = useState<any[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [showPricing, setShowPricing] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [presetIndex, setPresetIndex] = useState(0);
@@ -431,29 +336,16 @@ export default function App() {
   }, []);
 
   async function signUp() {
-    if (!email || !password) {
-      alert("Please enter email and password.");
-      return;
-    }
-
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters.");
-      return;
-    }
+    if (!email || !password) return alert("Please enter email and password.");
+    if (password.length < 6) return alert("Password must be at least 6 characters.");
 
     setAuthLoading(true);
 
-    const { data: authData, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    const { data: authData, error } = await supabase.auth.signUp({ email, password });
 
     setAuthLoading(false);
 
-    if (error) {
-      alert(error.message);
-      return;
-    }
+    if (error) return alert(error.message);
 
     if (authData.user) {
       await loadProfile(authData.user.id, authData.user.email || email);
@@ -465,10 +357,7 @@ export default function App() {
   }
 
   async function signIn() {
-    if (!email || !password) {
-      alert("Please enter email and password.");
-      return;
-    }
+    if (!email || !password) return alert("Please enter email and password.");
 
     setAuthLoading(true);
 
@@ -479,10 +368,7 @@ export default function App() {
 
     setAuthLoading(false);
 
-    if (error) {
-      alert(error.message);
-      return;
-    }
+    if (error) return alert(error.message);
 
     if (authData.user) {
       setUser(authData.user);
@@ -524,15 +410,8 @@ export default function App() {
     try {
       const res = await fetch("/api/stripe-checkout", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          plan,
-          userId: user.id,
-          email: user.email,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan, userId: user.id, email: user.email }),
       });
 
       const result = await res.json();
@@ -607,15 +486,8 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          prompt: finalPrompt,
-          ratio,
-          referenceImage,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: finalPrompt, ratio, referenceImage }),
       });
 
       const result = await res.json();
@@ -682,30 +554,14 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
 
         <div className="topActions">
           <div className="languageTabs">
-            <button
-              type="button"
-              className={lang === "jp" ? "active" : ""}
-              onClick={() => setLang("jp")}
-            >
-              日本語
-            </button>
-
-            <button
-              type="button"
-              className={lang === "en" ? "active" : ""}
-              onClick={() => setLang("en")}
-            >
-              English
-            </button>
-
-            <button
-              type="button"
-              className={lang === "cn" ? "active" : ""}
-              onClick={() => setLang("cn")}
-            >
-              中文
-            </button>
+            <button type="button" className={lang === "jp" ? "active" : ""} onClick={() => setLang("jp")}>日本語</button>
+            <button type="button" className={lang === "en" ? "active" : ""} onClick={() => setLang("en")}>English</button>
+            <button type="button" className={lang === "cn" ? "active" : ""} onClick={() => setLang("cn")}>中文</button>
           </div>
+
+          <button type="button" className="ghostBtn" onClick={() => setShowPricing(true)}>
+            {t.pricing}
+          </button>
 
           <span className="pill">{user ? user.email : t.guest}</span>
 
@@ -714,46 +570,76 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
               {t.navLogout}
             </button>
           ) : (
-            <button
-              type="button"
-              className="ghostBtn"
-              onClick={() => setShowAuth(true)}
-            >
+            <button type="button" className="ghostBtn" onClick={() => setShowAuth(true)}>
               {t.navLogin}
             </button>
           )}
         </div>
       </header>
 
+      {showPricing && (
+        <div className="modalOverlay" onClick={() => setShowPricing(false)}>
+          <section className="pricingModal" onClick={(e) => e.stopPropagation()}>
+            <div className="authHeader">
+              <div>
+                <h2>{t.pricingTitle}</h2>
+                <p>{t.pricingSubtitle}</p>
+              </div>
+              <button type="button" onClick={() => setShowPricing(false)}>
+                {t.close}
+              </button>
+            </div>
+
+            <h3>{t.oneTimeTitle}</h3>
+            <div className="pricingGrid">
+              {creditPlans.map((plan, index) => (
+                <div className="pricingCard" key={plan.key}>
+                  <span>{plan.name}</span>
+                  <strong>{plan.price}</strong>
+                  <p>{plan.credits} credits</p>
+                  <small>{index === 0 ? t.starterDesc : index === 1 ? t.creatorDesc : t.proDesc}</small>
+                  <button type="button" onClick={() => startCheckout(plan.key)}>
+                    {t.pay}
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <h3>{t.subscriptionTitle}</h3>
+            <div className="pricingGrid">
+              {monthlyPlans.map((plan, index) => (
+                <div className="pricingCard featured" key={plan.key}>
+                  <span>{plan.name}</span>
+                  <strong>{plan.price}</strong>
+                  <p>{plan.credits} credits / month</p>
+                  <small>{index === 0 ? t.liteDesc : index === 1 ? t.creatorMonthlyDesc : t.studioDesc}</small>
+                  <button type="button" onClick={() => startCheckout(plan.key)}>
+                    {t.pay}
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <p className="pricingNote">{t.commercial}</p>
+          </section>
+        </div>
+      )}
+
       {showAuth && !user && (
         <div className="modalOverlay" onClick={() => setShowAuth(false)}>
           <section className="authModal" onClick={(e) => e.stopPropagation()}>
             <div className="authHeader">
               <h2>{t.navLogin}</h2>
-
-              <button type="button" onClick={() => setShowAuth(false)}>
-                {t.close}
-              </button>
+              <button type="button" onClick={() => setShowAuth(false)}>{t.close}</button>
             </div>
 
-            <input
-              placeholder={t.email}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            <input
-              placeholder={t.password}
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <input placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input placeholder={t.password} type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
             <div className="authButtons">
               <button type="button" onClick={signIn} disabled={authLoading}>
                 {authLoading ? "..." : t.signIn}
               </button>
-
               <button type="button" onClick={signUp} disabled={authLoading}>
                 {authLoading ? "..." : t.signUp}
               </button>
@@ -775,84 +661,17 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
               <span>{t.plan}</span>
               <strong>{user ? user.email : t.guest}</strong>
             </div>
-
             <div>
               <span>Credits</span>
-              <strong>
-                {t.creditsLabel} {credits}
-              </strong>
-            </div>
-          </div>
-
-          <div className="sectionCard">
-            <h3>{t.buyCredits}</h3>
-
-            <div className="chips">
-              <button
-                type="button"
-                className="chip"
-                onClick={() => startCheckout("starter")}
-              >
-                Starter ¥980
-              </button>
-
-              <button
-                type="button"
-                className="chip"
-                onClick={() => startCheckout("creator")}
-              >
-                Creator ¥1,980
-              </button>
-
-              <button
-                type="button"
-                className="chip"
-                onClick={() => startCheckout("pro")}
-              >
-                Pro ¥4,980
-              </button>
-            </div>
-
-            <h3>{t.monthlyPlan}</h3>
-
-            <div className="chips">
-              <button
-                type="button"
-                className="chip"
-                onClick={() => startCheckout("lite_monthly")}
-              >
-                Lite ¥980/月
-              </button>
-
-              <button
-                type="button"
-                className="chip"
-                onClick={() => startCheckout("creator_monthly")}
-              >
-                Creator ¥2,980/月
-              </button>
-
-              <button
-                type="button"
-                className="chip"
-                onClick={() => startCheckout("studio_monthly")}
-              >
-                Studio ¥9,800/月
-              </button>
+              <strong>{t.creditsLabel} {credits}</strong>
             </div>
           </div>
 
           <div className="sectionCard">
             <h3>{t.useCase}</h3>
-
             <div className="presetGrid">
               {t.presets.map((item, index) => (
-                <button
-                  type="button"
-                  key={item.label}
-                  className={presetIndex === index ? "preset active" : "preset"}
-                  onClick={() => setPresetIndex(index)}
-                >
+                <button type="button" key={item.label} className={presetIndex === index ? "preset active" : "preset"} onClick={() => setPresetIndex(index)}>
                   <strong>{item.label}</strong>
                   <span>{item.desc}</span>
                 </button>
@@ -862,33 +681,19 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
 
           <div className="sectionCard">
             <h3>{t.promptTitle}</h3>
-
-            <textarea
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder={t.placeholder}
-            />
+            <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder={t.placeholder} />
           </div>
 
           <div className="sectionCard">
             <h3>{t.referenceImage}</h3>
-
             <label className="uploadBox">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  handleReferenceUpload(e.target.files?.[0] || null)
-                }
-              />
-
+              <input type="file" accept="image/*" onChange={(e) => handleReferenceUpload(e.target.files?.[0] || null)} />
               <span>{t.uploadImage}</span>
             </label>
 
             {referenceImage && (
               <div className="referencePreview">
                 <img src={referenceImage} alt="Reference" />
-
                 <button type="button" onClick={() => setReferenceImage("")}>
                   {t.removeImage}
                 </button>
@@ -898,15 +703,9 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
 
           <div className="sectionCard">
             <h3>{t.styleTitle}</h3>
-
             <div className="chips">
               {t.styles.map((item, index) => (
-                <button
-                  type="button"
-                  key={item.label}
-                  className={styleIndex === index ? "chip active" : "chip"}
-                  onClick={() => setStyleIndex(index)}
-                >
+                <button type="button" key={item.label} className={styleIndex === index ? "chip active" : "chip"} onClick={() => setStyleIndex(index)}>
                   {item.label}
                 </button>
               ))}
@@ -916,17 +715,9 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
           <div className="twoColumns">
             <div className="sectionCard">
               <h3>{t.layoutTitle}</h3>
-
               <div className="chips">
                 {t.layouts.map((item, index) => (
-                  <button
-                    type="button"
-                    key={item.label}
-                    className={
-                      layoutIndex === index ? "chip active" : "chip"
-                    }
-                    onClick={() => setLayoutIndex(index)}
-                  >
+                  <button type="button" key={item.label} className={layoutIndex === index ? "chip active" : "chip"} onClick={() => setLayoutIndex(index)}>
                     {item.label}
                   </button>
                 ))}
@@ -935,15 +726,9 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
 
             <div className="sectionCard">
               <h3>{t.ratioTitle}</h3>
-
               <div className="chips">
                 {ratios.map((item) => (
-                  <button
-                    type="button"
-                    key={item}
-                    className={ratio === item ? "chip active" : "chip"}
-                    onClick={() => setRatio(item)}
-                  >
+                  <button type="button" key={item} className={ratio === item ? "chip active" : "chip"} onClick={() => setRatio(item)}>
                     {item}
                   </button>
                 ))}
@@ -951,12 +736,7 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
             </div>
           </div>
 
-          <button
-            type="button"
-            className="generateBtn"
-            onClick={generateImage}
-            disabled={loading}
-          >
+          <button type="button" className="generateBtn" onClick={generateImage} disabled={loading}>
             {loading ? t.generating : t.generate}
           </button>
         </section>
@@ -965,11 +745,8 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
           <div className="previewTop">
             <div>
               <span>{t.preview}</span>
-              <h2>
-                {t.presets[presetIndex].label} · {t.styles[styleIndex].label}
-              </h2>
+              <h2>{t.presets[presetIndex].label} · {t.styles[styleIndex].label}</h2>
             </div>
-
             <em>{ratio}</em>
           </div>
 
@@ -989,14 +766,8 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
           {showHistory && (
             <div className="historyPanel">
               {historyImages.length === 0 && <p>{t.noHistory}</p>}
-
               {historyImages.map((item) => (
-                <button
-                  type="button"
-                  key={item.id}
-                  className="historyItem"
-                  onClick={() => setImage(item.image_url)}
-                >
+                <button type="button" key={item.id} className="historyItem" onClick={() => setImage(item.image_url)}>
                   <img src={item.image_url} alt="History" />
                 </button>
               ))}
@@ -1004,31 +775,15 @@ premium AI image, clean composition, beautiful lighting, commercially usable, no
           )}
 
           <div className="toolRow">
-            <button
-              type="button"
-              onClick={() => setShowHistory(!showHistory)}
-            >
-              {t.history}
-            </button>
-
-            <button type="button" disabled>
-              {t.batch}
-            </button>
-
-            <button type="button" disabled>
-              {t.edit}
-            </button>
+            <button type="button" onClick={() => setShowHistory(!showHistory)}>{t.history}</button>
+            <button type="button" disabled>{t.batch}</button>
+            <button type="button" disabled>{t.edit}</button>
           </div>
 
           {image && (
             <div className="actions">
-              <button type="button" onClick={downloadImage}>
-                {t.download}
-              </button>
-
-              <button type="button" onClick={copyShareText}>
-                {t.share}
-              </button>
+              <button type="button" onClick={downloadImage}>{t.download}</button>
+              <button type="button" onClick={copyShareText}>{t.share}</button>
             </div>
           )}
         </aside>
